@@ -12,9 +12,12 @@ namespace SmartLockDemo.Business
     {
         public ModuleDescriptor() : base(new List<ServiceDescriptor>
         {
+            ServiceDescriptor.Describe(typeof(IValidatorAccessor), typeof(ValidatorAccessor), ServiceLifetime.Singleton),
             ServiceDescriptor.Describe(typeof(IUserService), typeof(UserService), ServiceLifetime.Scoped 
                 /*TO-DO: ServiceAccessor should develop, and this lifetime should change to singleton*/)
         })
-        { }
+        {
+            FluentValidation.ValidatorOptions.Global.LanguageManager.Enabled = false;
+        }
     }
 }

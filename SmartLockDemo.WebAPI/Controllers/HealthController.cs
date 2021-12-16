@@ -27,8 +27,8 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// REST service to check something in API
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public IActionResult CheckSomething([FromQuery] int doorId, [FromQuery] int userId)
-            => Ok(_userService.CheckDoorAccess(new DoorAccessContext { DoorId = doorId, UserId = userId }));
+        [HttpPost]
+        public IActionResult CheckSomething([FromBody] UserCreationRequest request)
+            => Ok(_userService.CreateUser(request));
     }
 }

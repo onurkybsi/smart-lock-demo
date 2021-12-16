@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartLockDemo.Business.Service.User;
 
 namespace SmartLockDemo.WebAPI.Controllers
 {
@@ -9,10 +10,10 @@ namespace SmartLockDemo.WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class HealthController : ControllerBase
     {
-        private readonly Data.IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
 
-        public HealthController(Data.IUnitOfWork unitOfWork)
-            => _unitOfWork = unitOfWork;
+        public HealthController(IUserService userService)
+            => _userService = userService;
 
         /// <summary>
         /// Returns 200 if the server is running
@@ -27,7 +28,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult CheckSomething()
-            => Ok(_unitOfWork.UserRepository.GetList(user => true));
+        public IActionResult CheckSomething([FromQuery] int doorId, [FromQuery] int userId)
+            => Ok(_userService.CheckDoorAccess(new DoorAccessContext { DoorId = doorId, UserId = userId }));
     }
 }

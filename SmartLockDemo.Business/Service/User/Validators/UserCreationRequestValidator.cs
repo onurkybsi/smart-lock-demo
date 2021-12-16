@@ -9,11 +9,14 @@ namespace SmartLockDemo.Business.Service.User
 
         public UserCreationRequestValidator()
         {
-            RuleFor(request => request).NotNull();
+            RuleFor(request => request).Null();
             RuleFor(request => request.Email)
+                .NotNull()
+                .NotEmpty()
                 .EmailAddress()
                 .Must(email => email.Length < 255);
             RuleFor(request => request.Password)
+                .NotNull()
                 .NotEmpty()
                 .Must(password => Regex.Match(password, strongPasswordRegexExpression).Success)
                 .Must(password => password.Length < 50);

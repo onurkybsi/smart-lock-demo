@@ -1,5 +1,5 @@
 ﻿using FluentValidation.Results;
-using SmartLockDemo.Business.Utilities;
+using SmartLockDemo.Infrastructure.Utilities;
 
 namespace SmartLockDemo.Business.Service.User
 {

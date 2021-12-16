@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Security.Cryptography;
 
 namespace SmartLockDemo.WebAPI
 {
@@ -28,6 +29,10 @@ namespace SmartLockDemo.WebAPI
 
         private static void DescribeModules(IServiceCollection services)
         {
+            byte[] salt = new byte[128 / 8];
+            using (RNGCryptoServiceProvider rngCsp = new()) rngCsp.GetBytes(salt);
+            (new Infrastructure.ModuleDescriptor(new Infrastructure.ModuleContext(salt))).Describe(services);
+
             (new Data.ModuleDescriptor(new Data.ModuleContext("Server=(localdb)\\MSSQLLocalDB;Database=SmartLockDemo;Trusted_Connection=True;")))
                 .Describe(services);
             (new Business.ModuleDescriptor()).Describe(services);

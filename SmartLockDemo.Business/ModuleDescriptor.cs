@@ -1,6 +1,11 @@
 ﻿using KybInfrastructure.Core;
 using Microsoft.Extensions.DependencyInjection;
+using SmartLockDemo.Business.Service.SmartLockAdministration;
 using SmartLockDemo.Business.Service.User;
+using SmartLockDemo.Business.Utilities;
+using SmartLockDemo.Data;
+using SmartLockDemo.Infrastructure.Utilities;
+using System;
 using System.Collections.Generic;
 
 namespace SmartLockDemo.Business
@@ -14,7 +19,13 @@ namespace SmartLockDemo.Business
         {
             ServiceDescriptor.Describe(typeof(IValidatorAccessor), typeof(ValidatorAccessor), ServiceLifetime.Singleton),
             ServiceDescriptor.Describe(typeof(IUserService), typeof(UserService), ServiceLifetime.Scoped 
-                /*TO-DO: ServiceAccessor should develop, and this lifetime should change to singleton*/)
+                /*TO-DO: ServiceAccessor should develop, and this lifetime should change to singleton*/),
+            ServiceDescriptor.Describe(typeof(ISmartLockAdministrationService), typeof(SmartLockAdministrationService),
+                ServiceLifetime.Scoped),
+        }, new List<Type>
+        {
+            /* Dependencies of Business module */
+            typeof(IUnitOfWork), typeof(IEncryptionUtilities)
         })
         {
             FluentValidation.ValidatorOptions.Global.LanguageManager.Enabled = false;

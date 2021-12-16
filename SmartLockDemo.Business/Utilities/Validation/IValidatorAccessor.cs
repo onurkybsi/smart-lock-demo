@@ -1,4 +1,6 @@
-﻿namespace SmartLockDemo.Business.Service.User
+﻿using SmartLockDemo.Business.Service.User;
+
+namespace SmartLockDemo.Business.Utilities
 {
     internal interface IValidatorAccessor
     {

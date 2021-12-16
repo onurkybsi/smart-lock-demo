@@ -1,4 +1,4 @@
-﻿namespace SmartLockDemo.Business.Utilities
+﻿namespace SmartLockDemo.Infrastructure.Utilities
 {
     /// <summary>
     /// Base model for operation result models

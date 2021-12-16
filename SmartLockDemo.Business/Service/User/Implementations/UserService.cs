@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using FluentValidation;
+using SmartLockDemo.Business.Utilities;
+using SmartLockDemo.Infrastructure.Utilities;
+using System.Linq;
 
 namespace SmartLockDemo.Business.Service.User
 {
@@ -9,16 +12,28 @@ namespace SmartLockDemo.Business.Service.User
     {
         private readonly Data.IUnitOfWork unitOfWork;
         private readonly IValidatorAccessor validatorAccessor;
+        private readonly IEncryptionUtilities encryptionUtilities;
 
-        public UserService(Data.IUnitOfWork unitOfWork, IValidatorAccessor validatorAccessor)
+        public UserService(Data.IUnitOfWork unitOfWork, IValidatorAccessor validatorAccessor, IEncryptionUtilities encryptionUtilities)
         {
             this.unitOfWork = unitOfWork;
             this.validatorAccessor = validatorAccessor;
+            this.encryptionUtilities = encryptionUtilities;
         }
 
         public UserCreationResult CreateUser(UserCreationRequest request)
         {
-            return new UserCreationResult(validatorAccessor.UserCreationRequest.Validate(request));
+            validatorAccessor.UserCreationRequest.ValidateWithExceptionOption(request);
+
+            unitOfWork.UserRepository.Add(new Data.Entites.User
+            {
+                Email = request.Email,
+                HashedPassord = encryptionUtilities.Hash(request.Password),
+                Role = (byte)Role.User
+            });
+            unitOfWork.SaveChanges();
+
+            return new UserCreationResult(true);
         }
 
         public DoorAccessControlResult CheckDoorAccess(DoorAccessControlRequest request)

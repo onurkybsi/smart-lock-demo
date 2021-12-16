@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32002.185
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{57103CCB-EA9C-4C53-9A11-6FC827ADD71F}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartLockDemo.Business", "SmartLockDemo.Business\SmartLockDemo.Business.csproj", "{E24CA690-BDEC-4A8E-B03E-D1BD78199F3B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartLockDemo.WebAPI", "SmartLockDemo.WebAPI\SmartLockDemo.WebAPI.csproj", "{CDA254F3-BB12-49AB-8D8B-44F2FA6C7A15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLockDemo.Business.UnitTest", "SmartLockDemo.Business.UnitTest\SmartLockDemo.Business.UnitTest.csproj", "{F9A35CBF-992C-454D-9504-931CBC9B00BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{CDA254F3-BB12-49AB-8D8B-44F2FA6C7A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDA254F3-BB12-49AB-8D8B-44F2FA6C7A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDA254F3-BB12-49AB-8D8B-44F2FA6C7A15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9A35CBF-992C-454D-9504-931CBC9B00BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9A35CBF-992C-454D-9504-931CBC9B00BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9A35CBF-992C-454D-9504-931CBC9B00BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9A35CBF-992C-454D-9504-931CBC9B00BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{E4E0A952-A279-4EF8-BCDA-AC83C35C1B26} = {57103CCB-EA9C-4C53-9A11-6FC827ADD71F}
 		{E24CA690-BDEC-4A8E-B03E-D1BD78199F3B} = {57103CCB-EA9C-4C53-9A11-6FC827ADD71F}
 		{CDA254F3-BB12-49AB-8D8B-44F2FA6C7A15} = {57103CCB-EA9C-4C53-9A11-6FC827ADD71F}
+		{F9A35CBF-992C-454D-9504-931CBC9B00BA} = {837779FC-25C5-42E3-993C-FB100A0441B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C792F7F-3F07-4B87-B7A4-BC4367055FAC}

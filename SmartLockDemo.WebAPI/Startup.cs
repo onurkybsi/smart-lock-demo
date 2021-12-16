@@ -28,7 +28,8 @@ namespace SmartLockDemo.WebAPI
 
         private static void DescribeModules(IServiceCollection services)
         {
-            (new Data.ModuleDescriptor()).Describe(services);
+            (new Data.ModuleDescriptor(new Data.ModuleContext("Server=(localdb)\\MSSQLLocalDB;Database=SmartLockDemo;Trusted_Connection=True;")))
+                .Describe(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

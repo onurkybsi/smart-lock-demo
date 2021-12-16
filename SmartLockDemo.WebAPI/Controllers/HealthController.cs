@@ -9,6 +9,11 @@ namespace SmartLockDemo.WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class HealthController : ControllerBase
     {
+        private readonly Data.IUnitOfWork _unitOfWork;
+
+        public HealthController(Data.IUnitOfWork unitOfWork)
+            => _unitOfWork = unitOfWork;
+
         /// <summary>
         /// Returns 200 if the server is running
         /// </summary>
@@ -16,5 +21,13 @@ namespace SmartLockDemo.WebAPI.Controllers
         [HttpGet]
         public IActionResult Check()
             => Ok("I'm healthy!");
+
+        /// <summary>
+        /// REST service to check something in API
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult CheckSomething()
+            => Ok(_unitOfWork.UserRepository.GetList(user => true));
     }
 }

@@ -22,7 +22,7 @@ namespace SmartLockDemo.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=SmartLockDemo;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(ModuleDescriptor.moduleContext.SQLServerConnectionString);
             }
         }
 

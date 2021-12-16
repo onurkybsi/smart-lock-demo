@@ -5,15 +5,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!--<PackageReference Include="KybInfrastructure.Core" Version="1.1.0" />-->
+		<PackageReference Include="KybInfrastructure.Core" Version="1.1.0" />
 		<PackageReference Include="FluentValidation" Version="10.3.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.1" />
-
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\KybInfrastructure\KybInfrastructure.Core\KybInfrastructure.Core.csproj" />
-
 	</ItemGroup>
 
 </Project>

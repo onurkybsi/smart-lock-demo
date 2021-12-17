@@ -24,5 +24,14 @@ namespace SmartLockDemo.WebAPI.Controllers
         [HttpPost(RestServiceUris.Administration.CreateUser)]
         public IActionResult CreateUser([FromBody] UserCreationRequest request)
             => Created(RestServiceUris.Administration.CreateUser, _smartLockAdministrationService.CreateUser(request));
+
+        /// <summary>
+        /// Creates a new door in the system
+        /// </summary>
+        /// <param name="request">Door creation parameters</param>
+        /// <returns>Result of creation operation</returns>
+        [HttpPost(RestServiceUris.Administration.CreateDoor)]
+        public IActionResult CreateDoor([FromBody] DoorCreationRequest request)
+            => Created(RestServiceUris.Administration.CreateDoor, _smartLockAdministrationService.CreateDoor(request));
     }
 }

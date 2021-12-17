@@ -1,4 +1,5 @@
-﻿using SmartLockDemo.Business.Service.User;
+﻿using SmartLockDemo.Business.Service.SmartLockAdministration;
+using SmartLockDemo.Business.Service.User;
 
 namespace SmartLockDemo.Business.Utilities
 {
@@ -6,5 +7,6 @@ namespace SmartLockDemo.Business.Utilities
     {
         UserCreationRequestValidator UserCreationRequest { get; }
         DoorAccessControlRequestValidator DoorAccessControlRequest { get; }
+        DoorCreationRequestValidator DoorCreationRequest { get; }
     }
 }

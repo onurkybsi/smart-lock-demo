@@ -14,6 +14,10 @@
             /// URI should be called to create a new user in the system
             /// </summary>
             public const string CreateUser = "/administration/createuser";
+            /// <summary>
+            /// URI should be called to create a new door in the system
+            /// </summary>
+            public const string CreateDoor = "/administration/createdoor";
         }
 
         /// <summary>

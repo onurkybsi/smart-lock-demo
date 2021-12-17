@@ -18,7 +18,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         private IUserService userService = (new TestBusinessModuleInitializer()).GetService<IUserService>();
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Request_Is_Null()
+        public void CreateUser_Throws_ValidationException_If_Given_Request_Is_Null()
         {
             // Arrange
             UserCreationRequest request = null;
@@ -29,7 +29,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Email_Is_Null()
+        public void CreateUser_Throws_ValidationException_If_Given_Email_Is_Null()
         {
             // Arrange
             UserCreationRequest request = new UserCreationRequest
@@ -44,7 +44,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Email_Is_Empty_String()
+        public void CreateUser_Throws_ValidationException_If_Given_Email_Is_Empty_String()
         {
             // Arrange
             UserCreationRequest request = new UserCreationRequest
@@ -59,7 +59,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Email_Is_Not_Correct_Form()
+        public void CreateUser_Throws_ValidationException_If_Given_Email_Is_Not_Correct_Form()
         {
             // Arrange
             UserCreationRequest request = new UserCreationRequest
@@ -74,7 +74,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Email_Has_Character_More_Than_255()
+        public void CreateUser_Throws_ValidationException_If_Given_Email_Has_Character_More_Than_255()
         {
             // Arrange
             UserCreationRequest request = new UserCreationRequest
@@ -89,7 +89,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Email_Is_Already_Exists()
+        public void CreateUser_Throws_ValidationException_If_Given_Email_Is_Already_Exists()
         {
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
@@ -109,7 +109,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Password_Is_Null()
+        public void CreateUser_Throws_ValidationException_If_Given_Password_Is_Null()
         {
             // Arrange
             UserCreationRequest request = new UserCreationRequest
@@ -124,7 +124,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Password_Is_Empty()
+        public void CreateUser_Throws_ValidationException_If_Given_Password_Is_Empty()
         {
             // Arrange
             UserCreationRequest request = new UserCreationRequest
@@ -139,7 +139,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Password_Is_Not_Strong()
+        public void CreateUser_Throws_ValidationException_If_Given_Password_Is_Not_Strong()
         {
             // Arrange
             UserCreationRequest request = new UserCreationRequest
@@ -155,7 +155,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
 
 
         [Fact]
-        public void CreateUser_Throws_ValidationException_If_Password_Has_Character_More_Than_255()
+        public void CreateUser_Throws_ValidationException_If_Given_Password_Has_Character_More_Than_255()
         {
             // Arrange
             UserCreationRequest request = new UserCreationRequest
@@ -170,7 +170,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateUser_Saves_New_User_Entity_To_User_Repository()
+        public void CreateUser_Saves_A_New_User_Entity_To_User_Repository()
         {
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
@@ -195,7 +195,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CheckDoorAccess_Throws_ValidationException_If_Request_Is_Null()
+        public void CheckDoorAccess_Throws_ValidationException_If_Given_Request_Is_Null()
         {
             // Arrange
             DoorAccessControlRequest request = null;

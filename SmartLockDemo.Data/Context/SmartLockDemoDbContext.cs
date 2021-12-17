@@ -1,7 +1,7 @@
 ﻿using KybInfrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using SmartLockDemo.Data.Configurations;
-using SmartLockDemo.Data.Entites;
+using SmartLockDemo.Data.Entities;
 
 namespace SmartLockDemo.Data
 {

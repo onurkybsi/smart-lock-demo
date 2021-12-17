@@ -29,6 +29,6 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         public IActionResult CheckSomething([FromBody] UserCreationRequest request)
-            => Ok(_userService.CreateUser(request));
+            => Ok(_userService.CheckDoorAccess(new DoorAccessControlRequest { UserId = 1, DoorId = 1 }));
     }
 }

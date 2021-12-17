@@ -1,4 +1,4 @@
-﻿namespace SmartLockDemo.Data.Entites
+﻿namespace SmartLockDemo.Data.Entities
 {
     /// <summary>
     /// Represents database entity of UserTag model

@@ -1,5 +1,5 @@
 ﻿using KybInfrastructure.Data;
-using SmartLockDemo.Data.Entites;
+using SmartLockDemo.Data.Entities;
 using System.Linq;
 
 namespace SmartLockDemo.Data.Repositories

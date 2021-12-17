@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using SmartLockDemo.Business.Utilities;
 using SmartLockDemo.Infrastructure.Utilities;
-using System;
 using System.Linq;
 
 namespace SmartLockDemo.Business.Service.User
@@ -11,44 +10,45 @@ namespace SmartLockDemo.Business.Service.User
     /// </summary>
     internal class UserService : IUserService
     {
-        private readonly Data.IUnitOfWork unitOfWork;
-        private readonly IValidatorAccessor validatorAccessor;
-        private readonly IEncryptionUtilities encryptionUtilities;
+        private readonly Data.IUnitOfWork _unitOfWork;
+        private readonly IValidatorAccessor _validatorAccessor;
+        private readonly IEncryptionUtilities _encryptionUtilities;
 
         public UserService(Data.IUnitOfWork unitOfWork, IValidatorAccessor validatorAccessor, IEncryptionUtilities encryptionUtilities)
         {
-            this.unitOfWork = unitOfWork;
-            this.validatorAccessor = validatorAccessor;
-            this.encryptionUtilities = encryptionUtilities;
+            _unitOfWork = unitOfWork;
+            _validatorAccessor = validatorAccessor;
+            _encryptionUtilities = encryptionUtilities;
         }
 
         public UserCreationResult CreateUser(UserCreationRequest request)
         {
             if (request is null)
-                throw new ArgumentNullException(nameof(request));
-            validatorAccessor.UserCreationRequest.ValidateWithExceptionOption(request);
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.UserCreationRequest.ValidateWithExceptionOption(request);
 
-            unitOfWork.UserRepository.Add(new Data.Entites.User
+            _unitOfWork.UserRepository.Add(new Data.Entities.User
             {
                 Email = request.Email,
-                HashedPassword = encryptionUtilities.Hash(request.Password),
+                HashedPassword = _encryptionUtilities.Hash(request.Password),
                 Role = (byte)Role.User
             });
-            unitOfWork.SaveChanges();
+            _unitOfWork.SaveChanges();
 
             return new UserCreationResult(true);
         }
 
         public DoorAccessControlResult CheckDoorAccess(DoorAccessControlRequest request)
         {
-            validateDoorAccessControlRequest(request);
-            bool userHasTheTag = (from td in unitOfWork.TagDoorRepository.GetTable()
-                                  join ut in unitOfWork.UserTagRepository.GetTable() on td.TagId equals ut.TagId
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.DoorAccessControlRequest.ValidateWithExceptionOption(request);
+
+            bool userHasTheTag = (from td in _unitOfWork.TagDoorRepository.GetTable()
+                                  join ut in _unitOfWork.UserTagRepository.GetTable() on td.TagId equals ut.TagId
                                   where td.DoorId == request.DoorId && ut.UserId == request.UserId
                                   select new { }).Any();
             return new DoorAccessControlResult { IsUserAuthorized = userHasTheTag };
         }
-
-        private static void validateDoorAccessControlRequest(DoorAccessControlRequest context) { }
     }
 }

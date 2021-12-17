@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SmartLockDemo.Data.Entites;
+using SmartLockDemo.Data.Entities;
 
 namespace SmartLockDemo.Data.Configurations
 {

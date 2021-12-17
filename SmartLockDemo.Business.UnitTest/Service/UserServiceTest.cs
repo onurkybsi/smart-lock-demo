@@ -2,10 +2,10 @@
 using Moq;
 using SmartLockDemo.Business.Service.User;
 using SmartLockDemo.Data;
-using SmartLockDemo.Data.Repositories;
 using SmartLockDemo.Infrastructure.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace SmartLockDemo.Business.UnitTest.Service
@@ -18,12 +18,14 @@ namespace SmartLockDemo.Business.UnitTest.Service
         private IUserService userService = (new TestBusinessModuleInitializer()).GetService<IUserService>();
 
         [Fact]
-        public void CreateUser_Throws_ArgumentNullException_If_Request_Is_Null()
+        public void CreateUser_Throws_ValidationException_If_Request_Is_Null()
         {
             // Arrange
             UserCreationRequest request = null;
-            // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => userService.CreateUser(request));
+            // Act
+            Exception exception = Record.Exception(() => userService.CreateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
         }
 
         [Fact]
@@ -173,7 +175,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
             mockUnitOfWork.Setup(muw =>
-                muw.UserRepository.Add(It.Is<Data.Entites.User>(user =>
+                muw.UserRepository.Add(It.Is<Data.Entities.User>(user =>
                     user.Email == ValidEmail)));
             mockUnitOfWork.Setup(muw =>
                 muw.SaveChanges());
@@ -188,8 +190,118 @@ namespace SmartLockDemo.Business.UnitTest.Service
             userServiceToSetup.CreateUser(request);
             // Assert
             mockUnitOfWork.Verify(muw =>
-                muw.UserRepository.Add(It.Is<Data.Entites.User>(user =>
+                muw.UserRepository.Add(It.Is<Data.Entities.User>(user =>
                     user.Email == ValidEmail)), Times.Once());
+        }
+
+        [Fact]
+        public void CheckDoorAccess_Throws_ValidationException_If_Request_Is_Null()
+        {
+            // Arrange
+            DoorAccessControlRequest request = null;
+            // Act
+            Exception exception = Record.Exception(() => userService.CheckDoorAccess(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
+        }
+
+        [Fact]
+        public void CheckDoorAccess_Throws_ValidationException_If_Given_UserId_Is_Not_Greater_Than_1()
+        {
+            // Arrange
+            DoorAccessControlRequest request = new DoorAccessControlRequest { UserId = 0, DoorId = 1 };
+            // Act
+            Exception exception = Record.Exception(() => userService.CheckDoorAccess(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("UserId"));
+        }
+
+        [Fact]
+        public void CheckDoorAccess_Throws_ValidationException_If_Given_DoorId_Is_Not_Greater_Than_1()
+        {
+            // Arrange
+            DoorAccessControlRequest request = new DoorAccessControlRequest { UserId = 1, DoorId = 0 };
+            // Act
+            Exception exception = Record.Exception(() => userService.CheckDoorAccess(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("DoorId"));
+        }
+
+        [Fact]
+        public void CheckDoorAccess_Returns_IsUserAuthorized_True_If_There_Are_Valid_Entities_In_TagDoor_And_UserTag_Repositories_By_Given_Request()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+
+            SetupTagDoorRepository(mockUnitOfWork, new List<Data.Entities.TagDoor> {
+                new Data.Entities.TagDoor {
+                    DoorId = 1, TagId = 2
+                }
+            });
+            SetupUserTagRepository(mockUnitOfWork, new List<Data.Entities.UserTag> {
+                new Data.Entities.UserTag {
+                    UserId = 1, TagId = 2
+                }
+            });
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+
+            DoorAccessControlRequest request = new()
+            {
+                UserId = 1,
+                DoorId = 1,
+            };
+
+            // Act
+            DoorAccessControlResult actualResult = userServiceToSetup.CheckDoorAccess(request);
+
+            // Assert
+            Assert.True(actualResult.IsUserAuthorized);
+        }
+
+        private static void SetupTagDoorRepository(Mock<IUnitOfWork> mockUnitOfWorkWillSetup, List<Data.Entities.TagDoor> mockRepository)
+         => mockUnitOfWorkWillSetup.Setup(muw => muw.TagDoorRepository.GetTable())
+                .Returns(mockRepository.AsQueryable());
+
+        private static void SetupUserTagRepository(Mock<IUnitOfWork> mockUnitOfWorkWillSetup, List<Data.Entities.UserTag> mockRepository)
+            => mockUnitOfWorkWillSetup.Setup(muw => muw.UserTagRepository.GetTable())
+                .Returns(mockRepository.AsQueryable());
+
+        [Fact]
+        public void CheckDoorAccess_Returns_IsUserAuthorized_False_If_There_Are_No_Valid_Entitie_In_TagDoor_And_UserTag_Repositories_By_Given_Request()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+
+            SetupTagDoorRepository(mockUnitOfWork, new List<Data.Entities.TagDoor> {
+                new Data.Entities.TagDoor {
+                    DoorId = 1, TagId = 2
+                }
+            });
+            SetupUserTagRepository(mockUnitOfWork, new List<Data.Entities.UserTag> {
+                new Data.Entities.UserTag {
+                     UserId = 1, TagId = 1
+                },
+                new Data.Entities.UserTag {
+                     UserId = 1, TagId = 3
+                }
+            });
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+
+            DoorAccessControlRequest request = new()
+            {
+                UserId = 3,
+                DoorId = 1,
+            };
+
+            // Act
+            DoorAccessControlResult actualResult = userServiceToSetup.CheckDoorAccess(request);
+
+            // Assert
+            Assert.False(actualResult.IsUserAuthorized);
         }
     }
 }

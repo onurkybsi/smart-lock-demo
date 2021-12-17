@@ -15,5 +15,16 @@
             /// </summary>
             public const string CreateUser = "/administration/createuser";
         }
+
+        /// <summary>
+        /// Specifies REST services URIs that can be used to check door access
+        /// </summary>
+        public static class DoorAccess
+        {
+            /// <summary>
+            /// URI checks whether user has door access or not
+            /// </summary>
+            public const string CheckDoorAccess = "/dooraccess";
+        }
     }
 }

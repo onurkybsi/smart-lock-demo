@@ -60,7 +60,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CreateDoor_Throws_ValidationException_If_Given_Email_Is_Already_Exists()
+        public void CreateDoor_Throws_ValidationException_If_Given_Name_Is_Already_Exists()
         {
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
@@ -99,6 +99,93 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Assert
             mockUnitOfWork.Verify(muw =>
                 muw.DoorRepository.Add(It.Is<Data.Entities.Door>(door =>
+                    door.Name == ValidName)), Times.Once());
+        }
+
+        [Fact]
+        public void CreateTag_Throws_ValidationException_If_Given_Request_Is_Null()
+        {
+            // Arrange
+            TagCreationRequest request = null;
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateTag(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
+        }
+
+        [Fact]
+        public void CreateTag_Throws_ValidationException_If_Given_Name_Is_Null()
+        {
+            // Arrange
+            TagCreationRequest request = new();
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateTag(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
+        }
+
+        [Fact]
+        public void CreateTag_Throws_ValidationException_If_Given_Name_Is_Empty_String()
+        {
+            // Arrange
+            TagCreationRequest request = new TagCreationRequest { Name = "" };
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateTag(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
+        }
+
+        [Fact]
+        public void CreateTag_Throws_ValidationException_If_Given_Name_Length_Is_More_Than_50()
+        {
+            // Arrange
+            TagCreationRequest request = new TagCreationRequest { Name = new String('T', 51) };
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateTag(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
+        }
+
+        [Fact]
+        public void CreateTag_Throws_ValidationException_If_Given_Name_Is_Already_Exists()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(ValidName))
+                .Returns(true);
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            TagCreationRequest request = new()
+            {
+                Name = ValidName
+            };
+            // Act
+            Exception exception = Record.Exception(() => administrationServiceToSetup.CreateTag(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("This tag already exists!"));
+        }
+
+        [Fact]
+        public void CreateTag_Saves_A_New_Door_Entity_To_Door_Repository_If_Request_Is_Valid()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(ValidName))
+                .Returns(false);
+            mockUnitOfWork.Setup(muw => muw.TagRepository.Add(It.IsAny<Data.Entities.Tag>()));
+            mockUnitOfWork.Setup(muw => muw.SaveChanges());
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            TagCreationRequest validRequest = new()
+            {
+                Name = ValidName
+            };
+            // Act
+            administrationServiceToSetup.CreateTag(validRequest);
+            // Assert
+            mockUnitOfWork.Verify(muw =>
+                muw.TagRepository.Add(It.Is<Data.Entities.Tag>(door =>
                     door.Name == ValidName)), Times.Once());
         }
     }

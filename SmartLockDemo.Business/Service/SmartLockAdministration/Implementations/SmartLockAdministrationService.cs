@@ -33,5 +33,16 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
             _unitOfWork.SaveChanges();
             return new DoorCreationResult(true);
         }
+
+        public TagCreationResult CreateTag(TagCreationRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.TagCreationRequest.ValidateWithExceptionOption(request);
+
+            _unitOfWork.TagRepository.Add(new Data.Entities.Tag { Name = request.Name });
+            _unitOfWork.SaveChanges();
+            return new TagCreationResult(true);
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace SmartLockDemo.Business.Service.User
             unitOfWork.UserRepository.Add(new Data.Entites.User
             {
                 Email = request.Email,
-                HashedPassord = encryptionUtilities.Hash(request.Password),
+                HashedPassword = encryptionUtilities.Hash(request.Password),
                 Role = (byte)Role.User
             });
             unitOfWork.SaveChanges();

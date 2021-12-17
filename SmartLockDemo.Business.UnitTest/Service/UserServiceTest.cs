@@ -1,7 +1,11 @@
 ﻿using FluentValidation;
 using Moq;
 using SmartLockDemo.Business.Service.User;
+using SmartLockDemo.Data;
+using SmartLockDemo.Data.Repositories;
+using SmartLockDemo.Infrastructure.Utilities;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace SmartLockDemo.Business.UnitTest.Service
@@ -83,6 +87,26 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
+        public void CreateUser_Throws_ValidationException_If_Email_Is_Already_Exists()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(true);
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserCreationRequest request = new()
+            {
+                Email = ValidEmail,
+                Password = ValidPassword
+            };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.CreateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("This email already exists!"));
+        }
+
+        [Fact]
         public void CreateUser_Throws_ValidationException_If_Password_Is_Null()
         {
             // Arrange
@@ -147,13 +171,14 @@ namespace SmartLockDemo.Business.UnitTest.Service
         public void CreateUser_Saves_New_User_Entity_To_User_Repository()
         {
             // Arrange
-            TestBusinessModuleInitializer testModule = new();
-            IUserService userServiceToSetup = testModule.GetService<IUserService>();
-            testModule.GetMockUnitOfWork().Setup(muw =>
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw =>
                 muw.UserRepository.Add(It.Is<Data.Entites.User>(user =>
                     user.Email == ValidEmail)));
-            testModule.GetMockUnitOfWork().Setup(muw =>
+            mockUnitOfWork.Setup(muw =>
                 muw.SaveChanges());
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
             UserCreationRequest request = new UserCreationRequest
             {
                 Email = ValidEmail,
@@ -162,31 +187,9 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Act
             userServiceToSetup.CreateUser(request);
             // Assert
-            testModule.GetMockUnitOfWork().Verify(muw =>
+            mockUnitOfWork.Verify(muw =>
                 muw.UserRepository.Add(It.Is<Data.Entites.User>(user =>
                     user.Email == ValidEmail)), Times.Once());
-        }
-
-        [Fact]
-        public void CreateUser_Returns_Successful_User_Creation_Result()
-        {
-            // Arrange
-            TestBusinessModuleInitializer testModule = new();
-            IUserService userServiceToSetup = testModule.GetService<IUserService>();
-            testModule.GetMockUnitOfWork().Setup(muw =>
-                muw.UserRepository.Add(It.Is<Data.Entites.User>(user =>
-                    user.Email == ValidEmail)));
-            testModule.GetMockUnitOfWork().Setup(muw =>
-                muw.SaveChanges());
-            UserCreationRequest request = new UserCreationRequest
-            {
-                Email = ValidEmail,
-                Password = ValidPassword
-            };
-            // Act
-            var result = userServiceToSetup.CreateUser(request);
-            // Assert
-            Assert.True(result.IsSuccessful);
         }
     }
 }

@@ -11,6 +11,9 @@ namespace SmartLockDemo.Data.Configurations
 
             builder.ToTable("User");
 
+            builder.HasIndex(e => e.Email, "IX_U_Email")
+                .IsUnique();
+
             builder.Property(e => e.AuthorizationToken)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -20,7 +23,7 @@ namespace SmartLockDemo.Data.Configurations
                 .HasMaxLength(255)
                 .IsUnicode(false);
 
-            builder.Property(e => e.HashedPassord)
+            builder.Property(e => e.HashedPassword)
                 .IsRequired()
                 .HasMaxLength(255)
                 .IsUnicode(false);

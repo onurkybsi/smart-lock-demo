@@ -7,7 +7,7 @@
     {
         public int Id { get; private set; }
         public string Email { get; set; }
-        public string HashedPassord { get; set; }
+        public string HashedPassword { get; set; }
         public byte Role { get; set; }
         public string AuthorizationToken { get; set; }
     }

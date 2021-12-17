@@ -10,6 +10,9 @@ namespace SmartLockDemo.Data.Configurations
         {
             builder.ToTable("Tag");
 
+            builder.HasIndex(e => e.Name, "IX_U_Name")
+                .IsUnique();
+
             builder.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50)

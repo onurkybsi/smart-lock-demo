@@ -8,18 +8,19 @@ namespace SmartLockDemo.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<UserTag> builder)
         {
-            builder.HasNoKey();
-
             builder.ToTable("UserTag");
 
+            builder.HasIndex(e => new { e.UserId, e.TagId }, "IX_N_UserId_TagId")
+                .IsUnique();
+
             builder.HasOne(d => d.Tag)
-                .WithMany()
+                .WithMany(p => p.UserTags)
                 .HasForeignKey(d => d.TagId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserTag_TagId");
 
             builder.HasOne(d => d.User)
-                .WithMany()
+                .WithMany(p => p.UserTags)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserTag_UserId");

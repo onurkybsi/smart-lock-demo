@@ -10,5 +10,9 @@ namespace SmartLockDemo.Data.Repositories
 
         public IQueryable<TagDoor> GetTable()
             => DbSet.AsQueryable();
+
+        public bool CheckIfAccessAlreadyExistsForThisTag(int doorId, int tagId)
+            => DbSet.Any(tagDoor => tagDoor.DoorId == doorId &&
+                                    tagDoor.TagId == tagId);
     }
 }

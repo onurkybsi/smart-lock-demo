@@ -14,5 +14,13 @@ namespace SmartLockDemo.Data.Repositories
         /// </summary>
         /// <returns>IQueryable collection of TagDoor database table</returns>
         IQueryable<TagDoor> GetTable();
+
+        /// <summary>
+        /// Checks if the door is already accessible for the tag
+        /// </summary>
+        /// <param name="doorId">Id of door will be checked if it's accessible or not</param>
+        /// <param name="tagId">Id of tag will be checked if it already has access the door or not</param>
+        /// <returns></returns>
+        bool CheckIfAccessAlreadyExistsForThisTag(int doorId, int tagId);
     }
 }

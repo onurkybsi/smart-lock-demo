@@ -15,5 +15,8 @@ namespace SmartLockDemo.Data.Repositories
                 throw new ArgumentNullException(nameof(doorName));
             return DbSet.Any(door => door.Name == doorName);
         }
+
+        public bool CheckIfDoorAlreadyExists(int id)
+            => DbSet.Any(door => door.Id == id);
     }
 }

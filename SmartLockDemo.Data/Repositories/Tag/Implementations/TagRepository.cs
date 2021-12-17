@@ -15,5 +15,8 @@ namespace SmartLockDemo.Data.Repositories
                 throw new ArgumentNullException(nameof(tagName));
             return DbSet.Any(tag => tag.Name == tagName);
         }
+
+        public bool CheckIfTagAlreadyExists(int id)
+            => DbSet.Any(tag => tag.Id == id);
     }
 }

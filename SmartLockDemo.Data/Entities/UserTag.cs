@@ -1,10 +1,8 @@
 ﻿namespace SmartLockDemo.Data.Entities
 {
-    /// <summary>
-    /// Represents database entity of UserTag model
-    /// </summary>
     public partial class UserTag
     {
+        public int Id { get; set; }
         public int UserId { get; set; }
         public int TagId { get; set; }
 

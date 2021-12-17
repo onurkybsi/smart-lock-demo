@@ -14,5 +14,12 @@ namespace SmartLockDemo.Data.Repositories
         /// <param name="tagName">Tag name to check</param>
         /// <returns></returns>
         bool CheckIfTagAlreadyExists(string tagName);
+
+        /// <summary>
+        /// Checks if there is already a Tag with this ID
+        /// </summary>
+        /// <param name="id">Tag ID to check</param>
+        /// <returns></returns>
+        bool CheckIfTagAlreadyExists(int id);
     }
 }

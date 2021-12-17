@@ -42,5 +42,15 @@ namespace SmartLockDemo.WebAPI.Controllers
         [HttpPost(RestServiceUris.Administration.CreateTag)]
         public IActionResult CreateTag([FromBody] TagCreationRequest request)
             => Created(RestServiceUris.Administration.CreateTag, _smartLockAdministrationService.CreateTag(request));
+
+        /// <summary>
+        /// Creates a new access to a door
+        /// </summary>
+        /// <param name="request">Door access creation parameters</param>
+        /// <returns>Result of creation operation</returns>
+        [HttpPost(RestServiceUris.Administration.CreateDoorAccess)]
+        public IActionResult CreateDoorAccess([FromBody] DoorAccessCreationRequest request)
+            => Created(RestServiceUris.Administration.CreateDoorAccess,
+                _smartLockAdministrationService.CreateDoorAccess(request));
     }
 }

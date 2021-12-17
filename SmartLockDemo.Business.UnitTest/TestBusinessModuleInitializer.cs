@@ -18,6 +18,7 @@ namespace SmartLockDemo.Business.UnitTest
             mockUnitOfWork.Setup(muw => muw.UserRepository).Returns((new Mock<IUserRepository>()).Object);
             mockUnitOfWork.Setup(muw => muw.DoorRepository).Returns((new Mock<IDoorRepository>()).Object);
             mockUnitOfWork.Setup(muw => muw.TagRepository).Returns((new Mock<ITagRepository>()).Object);
+            mockUnitOfWork.Setup(muw => muw.TagDoorRepository).Returns((new Mock<ITagDoorRepository>()).Object);
             Mock<IEncryptionUtilities> mockEncryptionUtilities = new Mock<IEncryptionUtilities>();
 
             BuildServiceProvider(mockUnitOfWork.Object, mockEncryptionUtilities.Object);

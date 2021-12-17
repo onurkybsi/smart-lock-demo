@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using SmartLockDemo.Business.Utilities;
 using SmartLockDemo.Infrastructure.Utilities;
+using System;
 using System.Linq;
 
 namespace SmartLockDemo.Business.Service.User
@@ -23,6 +24,8 @@ namespace SmartLockDemo.Business.Service.User
 
         public UserCreationResult CreateUser(UserCreationRequest request)
         {
+            if (request is null)
+                throw new ArgumentNullException(nameof(request));
             validatorAccessor.UserCreationRequest.ValidateWithExceptionOption(request);
 
             unitOfWork.UserRepository.Add(new Data.Entites.User

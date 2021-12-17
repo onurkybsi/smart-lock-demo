@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using System.Text.RegularExpressions;
 
 namespace SmartLockDemo.Business.Service.User
 {
@@ -9,17 +8,14 @@ namespace SmartLockDemo.Business.Service.User
 
         public UserCreationRequestValidator()
         {
-            RuleFor(request => request).Null();
             RuleFor(request => request.Email)
-                .NotNull()
                 .NotEmpty()
                 .EmailAddress()
-                .Must(email => email.Length < 255);
+                .MaximumLength(255);
             RuleFor(request => request.Password)
-                .NotNull()
                 .NotEmpty()
-                .Must(password => Regex.Match(password, strongPasswordRegexExpression).Success)
-                .Must(password => password.Length < 50);
+                .Matches(strongPasswordRegexExpression)
+                .MaximumLength(255);
         }
     }
 }

@@ -1,22 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartLockDemo.Business.Service.SmartLockAdministration;
 using SmartLockDemo.Business.Service.User;
+using SmartLockDemo.WebAPI.Utilities;
 
 namespace SmartLockDemo.WebAPI.Controllers
 {
+    /// <summary>
+    /// Provides REST services to administrate the system
+    /// </summary>
     [ApiController]
-    [Route("[controller]/[action]")]
     public class AdministrationController : ControllerBase
     {
-        private readonly ISmartLockAdministrationService smartLockAdministrationService;
+        private readonly ISmartLockAdministrationService _smartLockAdministrationService;
 
         public AdministrationController(ISmartLockAdministrationService smartLockAdministrationService)
-        {
-            this.smartLockAdministrationService = smartLockAdministrationService;
-        }
+            => _smartLockAdministrationService = smartLockAdministrationService;
 
-        [HttpPost]
+        /// <summary>
+        /// Creates a new user in the system
+        /// </summary>
+        /// <param name="request">User creation parameters</param>
+        /// <returns>Result of creation operation</returns>
+        [HttpPost(RestServiceUris.Administration.CreateUser)]
         public IActionResult CreateUser([FromBody] UserCreationRequest request)
-            => Ok(smartLockAdministrationService.CreateUser(request));
+            => Created(RestServiceUris.Administration.CreateUser, _smartLockAdministrationService.CreateUser(request));
     }
 }

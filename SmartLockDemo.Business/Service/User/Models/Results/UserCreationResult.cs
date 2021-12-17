@@ -13,7 +13,7 @@ namespace SmartLockDemo.Business.Service.User
         public UserCreationResult(bool isSuccessful, string message) : base(isSuccessful, message) { }
 
         public UserCreationResult(ValidationResult validationResult) : base(validationResult.IsValid,
-            validationResult.ExtractErrorMessagesFromErrors())
+            validationResult.ExtractErrorMessagesFromValidationResult())
         { }
     }
 }

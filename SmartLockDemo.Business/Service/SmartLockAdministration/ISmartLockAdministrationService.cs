@@ -8,5 +8,6 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
         DoorCreationResult CreateDoor(DoorCreationRequest request);
         TagCreationResult CreateTag(TagCreationRequest request);
         DoorAccessCreationResult CreateDoorAccess(DoorAccessCreationRequest request);
+        UserTaggingResult TagUser(UserTaggingRequest request);
     }
 }

@@ -14,5 +14,13 @@ namespace SmartLockDemo.Data.Repositories
         /// </summary>
         /// <returns>IQueryable collection of UserTag database table</returns>
         IQueryable<UserTag> GetTable();
+
+        /// <summary>
+        /// Checks if the user already has this tag or not
+        /// </summary>
+        /// <param name="userId">Id of user will be checked if it has the tag or not</param>
+        /// <param name="tagId">Id of tag will be checked if it's already assigned to the user or not</param>
+        /// <returns></returns>
+        bool CheckIfUserAlreadyHasThisTag(int userId, int tagId);
     }
 }

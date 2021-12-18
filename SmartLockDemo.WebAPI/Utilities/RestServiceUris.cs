@@ -26,6 +26,10 @@
             /// URI should be called to create a new access to a door
             /// </summary>
             public const string CreateDoorAccess = "/administration/createdooraccess";
+            /// <summary>
+            /// URI should be called to tag an user
+            /// </summary>
+            public const string TagUser = "/administration/taguser";
         }
 
         /// <summary>

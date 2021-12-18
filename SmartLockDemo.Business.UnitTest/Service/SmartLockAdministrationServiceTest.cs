@@ -204,7 +204,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
         public void CreateDoorAccess_Throws_ValidationException_If_Given_DoorId_Is_Less_Than_1()
         {
             // Arrange
-            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 0, TagId = 1 };
+            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 0, TagId = 2 };
             // Act
             Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoorAccess(request));
             // Assert
@@ -215,11 +215,11 @@ namespace SmartLockDemo.Business.UnitTest.Service
         public void CreateDoorAccess_Throws_ValidationException_If_Given_TagId_Is_Less_Than_1()
         {
             // Arrange
-            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 1, TagId = 0 };
+            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 0 };
             // Act
             Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoorAccess(request));
             // Assert
-            Assert.True(exception is ValidationException && exception.Message.Contains("DoorId"));
+            Assert.True(exception is ValidationException && exception.Message.Contains("TagId"));
         }
 
         [Fact]
@@ -231,13 +231,13 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(false);
             mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(1))
                 .Returns(true);
-            mockUnitOfWork.Setup(muw => muw.TagDoorRepository.CheckIfAccessAlreadyExistsForThisTag(1, 1))
+            mockUnitOfWork.Setup(muw => muw.TagDoorRepository.CheckIfAccessAlreadyExistsForThisTag(2, 2))
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
             ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
 
-            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 1, TagId = 1 };
+            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 2 };
             // Act
             Exception exception = Record.Exception(() => administrationServiceToSetup.CreateDoorAccess(request));
             // Assert
@@ -253,13 +253,13 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(true);
             mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(1))
                 .Returns(false);
-            mockUnitOfWork.Setup(muw => muw.TagDoorRepository.CheckIfAccessAlreadyExistsForThisTag(1, 1))
+            mockUnitOfWork.Setup(muw => muw.TagDoorRepository.CheckIfAccessAlreadyExistsForThisTag(2, 2))
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
             ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
 
-            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 1, TagId = 1 };
+            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 2 };
             // Act
             Exception exception = Record.Exception(() => administrationServiceToSetup.CreateDoorAccess(request));
             // Assert
@@ -275,13 +275,13 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(true);
             mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(1))
                 .Returns(true);
-            mockUnitOfWork.Setup(muw => muw.TagDoorRepository.CheckIfAccessAlreadyExistsForThisTag(1, 1))
+            mockUnitOfWork.Setup(muw => muw.TagDoorRepository.CheckIfAccessAlreadyExistsForThisTag(2, 2))
                 .Returns(true);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
             ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
 
-            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 1, TagId = 1 };
+            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 2 };
             // Act
             Exception exception = Record.Exception(() => administrationServiceToSetup.CreateDoorAccess(request));
             // Assert
@@ -293,11 +293,11 @@ namespace SmartLockDemo.Business.UnitTest.Service
         {
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
-            mockUnitOfWork.Setup(muw => muw.DoorRepository.CheckIfDoorAlreadyExists(1))
+            mockUnitOfWork.Setup(muw => muw.DoorRepository.CheckIfDoorAlreadyExists(2))
                 .Returns(true);
-            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(1))
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(2))
                 .Returns(true);
-            mockUnitOfWork.Setup(muw => muw.TagDoorRepository.CheckIfAccessAlreadyExistsForThisTag(1, 1))
+            mockUnitOfWork.Setup(muw => muw.TagDoorRepository.CheckIfAccessAlreadyExistsForThisTag(2, 2))
                 .Returns(false);
             mockUnitOfWork.Setup(muw => muw.TagDoorRepository.Add(It.IsAny<Data.Entities.TagDoor>()));
             mockUnitOfWork.Setup(muw => muw.SaveChanges());
@@ -305,13 +305,138 @@ namespace SmartLockDemo.Business.UnitTest.Service
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
             ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
 
-            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 1, TagId = 1 };
+            DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 2 };
             // Act
             administrationServiceToSetup.CreateDoorAccess(request);
             // Assert
             mockUnitOfWork.Verify(muw =>
                 muw.TagDoorRepository.Add(It.Is<Data.Entities.TagDoor>(tagDoor =>
-                    tagDoor.TagId == 1 && tagDoor.DoorId == 1)), Times.Once());
+                    tagDoor.TagId == 2 && tagDoor.DoorId == 2)), Times.Once());
+        }
+
+        [Fact]
+        public void TagUser_Throws_ValidationException_If_Given_Request_Is_Null()
+        {
+            // Arrange
+            UserTaggingRequest request = null;
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.TagUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
+        }
+
+        [Fact]
+        public void TagUser_Throws_ValidationException_If_Given_UserId_Is_Less_Than_1()
+        {
+            // Arrange
+            UserTaggingRequest request = new UserTaggingRequest { UserId = 0, TagId = 2 };
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.TagUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("UserId"));
+        }
+
+        [Fact]
+        public void TagUser_Throws_ValidationException_If_Given_TagId_Is_Less_Than_1()
+        {
+            // Arrange
+            UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 0 };
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.TagUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("TagId"));
+        }
+
+        [Fact]
+        public void TagUser_Throws_ValidationException_If_There_Is_No_User_In_UserRepository_By_Given_UserId()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(2))
+                .Returns(false);
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(2))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserTagRepository.CheckIfUserAlreadyHasThisTag(2, 2))
+                .Returns(false);
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+
+            UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 2 };
+            // Act
+            Exception exception = Record.Exception(() => administrationServiceToSetup.TagUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("UserId"));
+        }
+
+        [Fact]
+        public void TagUser_Throws_ValidationException_If_There_Is_No_Tag_In_TagRepository_By_Given_TagId()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(1))
+                .Returns(false);
+            mockUnitOfWork.Setup(muw => muw.UserTagRepository.CheckIfUserAlreadyHasThisTag(2, 2))
+                .Returns(false);
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+
+            UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 2 };
+            // Act
+            Exception exception = Record.Exception(() => administrationServiceToSetup.TagUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("TagId"));
+        }
+
+        [Fact]
+        public void TagUser_Throws_ValidationException_If_User_Is_Already_Has_This_Tag()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(2))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(2))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserTagRepository.CheckIfUserAlreadyHasThisTag(2, 2))
+                .Returns(true);
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+
+            UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 2 };
+            // Act
+            Exception exception = Record.Exception(() => administrationServiceToSetup.TagUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("This user has already this tag!"));
+        }
+
+        [Fact]
+        public void TagUser_Tags_User_To_It_Can_Access_Doors_That_Is_Accessible_With_That_Tag()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(2))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(2))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserTagRepository.CheckIfUserAlreadyHasThisTag(2, 2))
+                .Returns(false);
+            mockUnitOfWork.Setup(muw => muw.UserTagRepository.Add(It.IsAny<Data.Entities.UserTag>()));
+            mockUnitOfWork.Setup(muw => muw.SaveChanges());
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+
+            UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 2 };
+            // Act
+            administrationServiceToSetup.TagUser(request);
+            // Assert
+            mockUnitOfWork.Verify(muw =>
+                muw.UserTagRepository.Add(It.Is<Data.Entities.UserTag>(userTag =>
+                    userTag.TagId == 2 && userTag.UserId == 2)), Times.Once());
         }
     }
 }

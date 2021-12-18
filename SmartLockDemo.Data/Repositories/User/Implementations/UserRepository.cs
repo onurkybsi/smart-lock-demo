@@ -15,5 +15,8 @@ namespace SmartLockDemo.Data.Repositories
                 throw new ArgumentNullException(nameof(emailToCheck));
             return DbSet.Any(user => user.Email == emailToCheck);
         }
+
+        public bool CheckIfUserExistsOrNot(int userId)
+            => DbSet.Any(user => user.Id == userId);
     }
 }

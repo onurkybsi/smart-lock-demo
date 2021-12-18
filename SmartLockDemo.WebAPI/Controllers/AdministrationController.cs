@@ -52,5 +52,15 @@ namespace SmartLockDemo.WebAPI.Controllers
         public IActionResult CreateDoorAccess([FromBody] DoorAccessCreationRequest request)
             => Created(RestServiceUris.Administration.CreateDoorAccess,
                 _smartLockAdministrationService.CreateDoorAccess(request));
+
+        /// <summary>
+        /// Tags an user to extend its door access as accessible doors under this tag
+        /// </summary>
+        /// <param name="request">User tagging parameters</param>
+        /// <returns></returns>
+        [HttpPost(RestServiceUris.Administration.TagUser)]
+        public IActionResult TagUser([FromBody] UserTaggingRequest request)
+            => Created(RestServiceUris.Administration.TagUser,
+                _smartLockAdministrationService.TagUser(request));
     }
 }

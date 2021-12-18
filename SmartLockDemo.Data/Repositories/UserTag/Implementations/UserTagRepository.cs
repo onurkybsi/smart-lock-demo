@@ -10,5 +10,9 @@ namespace SmartLockDemo.Data.Repositories
 
         public IQueryable<UserTag> GetTable()
             => DbSet.AsQueryable();
+
+        public bool CheckIfUserAlreadyHasThisTag(int userId, int tagId)
+            => DbSet.Any(userTag => userTag.UserId == userId &&
+                                    userTag.TagId == tagId);
     }
 }

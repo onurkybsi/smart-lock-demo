@@ -59,5 +59,20 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
             _unitOfWork.SaveChanges();
             return new DoorAccessCreationResult(true);
         }
+
+        public UserTaggingResult TagUser(UserTaggingRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.UserTaggingRequest.ValidateWithExceptionOption(request);
+
+            _unitOfWork.UserTagRepository.Add(new Data.Entities.UserTag
+            {
+                UserId = request.UserId,
+                TagId = request.TagId
+            });
+            _unitOfWork.SaveChanges();
+            return new UserTaggingResult(true);
+        }
     }
 }

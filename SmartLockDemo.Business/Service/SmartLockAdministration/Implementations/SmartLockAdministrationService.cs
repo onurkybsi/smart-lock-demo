@@ -102,5 +102,17 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
 
             return new UserTagRemovalResult(true);
         }
+
+        public UserDeletionResult DeleteUser(UserDeletionRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.UserDeletionRequest.ValidateWithExceptionOption(request);
+
+            _unitOfWork.UserRepository.Delete(request.UserId);
+            _unitOfWork.SaveChanges();
+
+            return new UserDeletionResult(true);
+        }
     }
 }

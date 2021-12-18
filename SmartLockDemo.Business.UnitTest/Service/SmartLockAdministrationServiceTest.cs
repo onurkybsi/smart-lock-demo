@@ -580,5 +580,65 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Assert
             mockUnitOfWork.Verify(muw => muw.UserTagRepository.Remove(2, 2), Times.Once);
         }
+
+        [Fact]
+        public void DeleteUser_Throws_ValidationException_If_Given_Request_Is_Null()
+        {
+            // Arrange
+            UserDeletionRequest request = null;
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.DeleteUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
+        }
+
+        [Fact]
+        public void DeleteUser_Throws_ValidationException_If_Given_UserId_Is_Less_Than_1()
+        {
+            // Arrange
+            UserDeletionRequest request = new() { UserId = 0 };
+            // Act
+            Exception exception = Record.Exception(() => smartLockAdministrationService.DeleteUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("UserId"));
+        }
+
+        [Fact]
+        public void DeleteUser_Throws_ValidationException_If_User_Already_Has_Not_Tag_In_Given_Parameters()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(2))
+                .Returns(false);
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+
+            UserDeletionRequest request = new() { UserId = 2 };
+            // Act
+            Exception exception = Record.Exception(() => administrationServiceToSetup.DeleteUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("There is no such a user already!"));
+        }
+
+        [Fact]
+        public void DeleteUser_Deletes_User_Entity_From_UserRepository_By_Given_Parameters_If_Request_Is_Valid()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(2))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.Delete(2));
+            mockUnitOfWork.Setup(muw => muw.SaveChanges());
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+
+            UserDeletionRequest request = new() { UserId = 2 };
+            // Act
+            administrationServiceToSetup.DeleteUser(request);
+            // Assert
+            mockUnitOfWork.Verify(muw => muw.UserRepository.Delete(2), Times.Once);
+        }
     }
 }

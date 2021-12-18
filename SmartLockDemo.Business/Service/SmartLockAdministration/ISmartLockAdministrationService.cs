@@ -55,5 +55,12 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
         /// <param name="request">User tag removal parameters</param>
         /// <returns></returns>
         UserTagRemovalResult RemoveUserTag(UserTagRemovalRequest request);
+
+        /// <summary>
+        /// Deletes an user from the system
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        UserDeletionResult DeleteUser(UserDeletionRequest request);
     }
 }

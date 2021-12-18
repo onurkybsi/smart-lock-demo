@@ -16,5 +16,11 @@ namespace SmartLockDemo.Data.Repositories
         /// <param name="userId">Id of user will be checked</param>
         /// <returns></returns>
         bool CheckIfUserExistsOrNot(int userId);
+
+        /// <summary>
+        /// Deletes user by ID
+        /// </summary>
+        /// <param name="userId"></param>
+        void Delete(int userId);
     }
 }

@@ -13,18 +13,14 @@ namespace SmartLockDemo.Data.Configurations
             builder.HasIndex(e => new { e.TagId, e.DoorId }, "IX_N_TagId_DoorId")
                 .IsUnique();
 
-            builder.Property(e => e.Id).ValueGeneratedOnAdd();
-
             builder.HasOne(d => d.Door)
-                .WithOne(p => p.TagDoor)
-                .HasForeignKey<TagDoor>(d => d.DoorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .WithMany(p => p.TagDoors)
+                .HasForeignKey(d => d.DoorId)
                 .HasConstraintName("FK_TagDoor_DoorId");
 
             builder.HasOne(d => d.Tag)
                 .WithMany(p => p.TagDoors)
                 .HasForeignKey(d => d.TagId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TagDoor_TagId");
         }
     }

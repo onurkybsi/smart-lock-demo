@@ -18,5 +18,13 @@ namespace SmartLockDemo.Data.Repositories
 
         public bool CheckIfUserExistsOrNot(int userId)
             => DbSet.Any(user => user.Id == userId);
+
+        public void Delete(int userId)
+        {
+            User entityWillBeDeleted = DbSet.FirstOrDefault(user => user.Id == userId);
+            if (entityWillBeDeleted is null)
+                throw new InvalidOperationException("There is no such an entity!");
+            DbSet.Remove(entityWillBeDeleted);
+        }
     }
 }

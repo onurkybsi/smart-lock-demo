@@ -16,13 +16,11 @@ namespace SmartLockDemo.Data.Configurations
             builder.HasOne(d => d.Tag)
                 .WithMany(p => p.UserTags)
                 .HasForeignKey(d => d.TagId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserTag_TagId");
 
             builder.HasOne(d => d.User)
                 .WithMany(p => p.UserTags)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserTag_UserId");
         }
     }

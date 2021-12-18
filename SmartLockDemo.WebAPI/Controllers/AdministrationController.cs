@@ -77,10 +77,24 @@ namespace SmartLockDemo.WebAPI.Controllers
                 DoorId = doorId
             }));
 
+        /// <summary>
+        /// Removes the tag from the user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tagId"></param>
+        /// <returns></returns>
         [HttpDelete(RestServiceUris.Administration.RemoveUserTag)]
         public IActionResult RemoveUserTag([FromQuery] int userId, [FromQuery] int tagId)
             => Ok(_smartLockAdministrationService.RemoveUserTag(new UserTagRemovalRequest { UserId = userId, TagId = tagId }));
 
-        // DeleteUser
+        /// <summary>
+        /// Deletes an user from the system
+        /// </summary>
+        /// <param name="userId">User id to delete</param>
+        /// <returns></returns>
+        [HttpDelete(RestServiceUris.Administration.DeleteUser)]
+        public IActionResult DeleteUser([FromQuery] int userId)
+            => Ok(_smartLockAdministrationService.DeleteUser(new UserDeletionRequest { UserId = userId }));
+
     }
 }

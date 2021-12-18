@@ -12,6 +12,7 @@ namespace SmartLockDemo.Business.Utilities
         private readonly TagCreationRequestValidator _tagCreationRequestValidator;
         private readonly DoorAccessCreationRequestValidator _doorAccessCreationRequestValidator;
         private readonly UserTaggingRequestValidator _userTaggingRequestValidator;
+        private readonly DoorAccessRemovalRequestValidator _doorAccessRemovalRequestValidator;
 
         public ValidatorAccessor(IUnitOfWork unitOfWork)
         {
@@ -21,6 +22,7 @@ namespace SmartLockDemo.Business.Utilities
             _tagCreationRequestValidator = new TagCreationRequestValidator(unitOfWork);
             _doorAccessCreationRequestValidator = new DoorAccessCreationRequestValidator(unitOfWork);
             _userTaggingRequestValidator = new UserTaggingRequestValidator(unitOfWork);
+            _doorAccessRemovalRequestValidator = new DoorAccessRemovalRequestValidator(unitOfWork);
         }
 
         public UserCreationRequestValidator UserCreationRequest { get => _userCreationRequestValidator; }
@@ -29,5 +31,6 @@ namespace SmartLockDemo.Business.Utilities
         public TagCreationRequestValidator TagCreationRequest { get => _tagCreationRequestValidator; }
         public DoorAccessCreationRequestValidator DoorAccessCreationRequest { get => _doorAccessCreationRequestValidator; }
         public UserTaggingRequestValidator UserTaggingRequest { get => _userTaggingRequestValidator; }
+        public DoorAccessRemovalRequestValidator DoorAccessRemovalRequest { get => _doorAccessRemovalRequestValidator; }
     }
 }

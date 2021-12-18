@@ -22,5 +22,12 @@ namespace SmartLockDemo.Data.Repositories
         /// <param name="tagId">Id of tag will be checked if it already has access the door or not</param>
         /// <returns></returns>
         bool CheckIfAccessAlreadyExistsForThisTag(int doorId, int tagId);
+
+        /// <summary>
+        /// Removes TagDoor entity by tagId and doorId
+        /// </summary>
+        /// <param name="tagId"></param>
+        /// <param name="doorId"></param>
+        void Remove(int tagId, int doorId);
     }
 }

@@ -31,6 +31,7 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
 
             _unitOfWork.DoorRepository.Add(new Data.Entities.Door { Name = request.Name });
             _unitOfWork.SaveChanges();
+
             return new DoorCreationResult(true);
         }
 
@@ -42,6 +43,7 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
 
             _unitOfWork.TagRepository.Add(new Data.Entities.Tag { Name = request.Name });
             _unitOfWork.SaveChanges();
+
             return new TagCreationResult(true);
         }
 
@@ -57,6 +59,7 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
                 TagId = request.TagId
             });
             _unitOfWork.SaveChanges();
+
             return new DoorAccessCreationResult(true);
         }
 
@@ -72,7 +75,20 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
                 TagId = request.TagId
             });
             _unitOfWork.SaveChanges();
+
             return new UserTaggingResult(true);
+        }
+
+        public DoorAccessRemovalResult RemoveDoorAccess(DoorAccessRemovalRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.DoorAccessRemovalRequest.ValidateWithExceptionOption(request);
+
+            _unitOfWork.TagDoorRepository.Remove(request.TagId, request.DoorId);
+            _unitOfWork.SaveChanges();
+
+            return new DoorAccessRemovalResult(true);
         }
     }
 }

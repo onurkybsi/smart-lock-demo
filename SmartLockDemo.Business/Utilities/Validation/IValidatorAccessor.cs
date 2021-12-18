@@ -11,5 +11,6 @@ namespace SmartLockDemo.Business.Utilities
         TagCreationRequestValidator TagCreationRequest { get; }
         DoorAccessCreationRequestValidator DoorAccessCreationRequest { get; }
         UserTaggingRequestValidator UserTaggingRequest { get; }
+        DoorAccessRemovalRequestValidator DoorAccessRemovalRequest { get; }
     }
 }

@@ -62,5 +62,17 @@ namespace SmartLockDemo.WebAPI.Controllers
         public IActionResult TagUser([FromBody] UserTaggingRequest request)
             => Created(RestServiceUris.Administration.TagUser,
                 _smartLockAdministrationService.TagUser(request));
+
+        // RemoveDoorAccess
+        [HttpDelete(RestServiceUris.Administration.RemoveDoorAccess)]
+        public IActionResult RemoveDoorAccess([FromQuery] int tagId, int doorId)
+            => Ok(_smartLockAdministrationService.RemoveDoorAccess(new DoorAccessRemovalRequest
+            {
+                TagId = tagId,
+                DoorId = doorId
+            }));
+
+        // RemoveTagFromUser
+        // DeleteUser
     }
 }

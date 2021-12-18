@@ -30,6 +30,10 @@
             /// URI should be called to tag an user
             /// </summary>
             public const string TagUser = "/administration/taguser";
+            /// <summary>
+            /// URI should be called to remove a door access from a tag
+            /// </summary>
+            public const string RemoveDoorAccess = "/administration/removedooraccess";
         }
 
         /// <summary>

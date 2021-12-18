@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using SmartLockDemo.WebAPI.Middlewares;
 using System.Security.Cryptography;
 
@@ -36,6 +37,8 @@ namespace SmartLockDemo.WebAPI
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSerilogRequestLogging();
+
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseSwagger();
@@ -44,6 +47,8 @@ namespace SmartLockDemo.WebAPI
             app.UseRouting();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+            Log.ForContext<Startup>().Information("{Application} is listening on {Env}...", env.ApplicationName, env.EnvironmentName);
         }
     }
 }

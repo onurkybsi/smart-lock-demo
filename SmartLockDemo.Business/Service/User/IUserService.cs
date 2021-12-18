@@ -18,5 +18,12 @@
         /// <param name="request">Parameters for door access control</param>
         /// <returns>Door access control result</returns>
         DoorAccessControlResult CheckDoorAccess(DoorAccessControlRequest request);
+
+        /// <summary>
+        /// Updates user by given values
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        UserUpdateResult UpdateUser(UserUpdateRequest request);
     }
 }

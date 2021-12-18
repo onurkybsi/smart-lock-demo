@@ -26,5 +26,22 @@ namespace SmartLockDemo.Data.Repositories
                 throw new InvalidOperationException("There is no such an entity!");
             DbSet.Remove(entityWillBeDeleted);
         }
+
+        public new void Update(User currentUser)
+        {
+            if (currentUser is null)
+                throw new ArgumentNullException(nameof(currentUser));
+
+            User userWillBeUpdated = DbSet.FirstOrDefault(user => user.Id == currentUser.Id);
+            if (userWillBeUpdated is null)
+                throw new ArgumentNullException("There is no such a user!");
+
+            if (currentUser.Email != null)
+                userWillBeUpdated.Email = currentUser.Email;
+            if (currentUser.HashedPassword != null)
+                userWillBeUpdated.HashedPassword = currentUser.HashedPassword;
+
+            DbSet.Update(userWillBeUpdated);
+        }
     }
 }

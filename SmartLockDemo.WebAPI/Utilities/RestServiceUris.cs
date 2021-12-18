@@ -54,5 +54,16 @@
             /// </summary>
             public const string CheckDoorAccess = "/dooraccess";
         }
+
+        /// <summary>
+        /// Specifies REST services URIs that can be used by users
+        /// </summary>
+        public static class User
+        {
+            /// <summary>
+            /// URI should be called to update an user
+            /// </summary>
+            public const string UpdateUser = "/user/update";
+        }
     }
 }

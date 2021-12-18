@@ -50,5 +50,25 @@ namespace SmartLockDemo.Business.Service.User
                                   select new { }).Any();
             return new DoorAccessControlResult { IsUserAuthorized = userHasTheTag };
         }
+
+        public UserUpdateResult UpdateUser(UserUpdateRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.UserUpdateRequest.ValidateWithExceptionOption(request);
+
+            // TO-DO: Change with a mapper!
+            _unitOfWork.UserRepository.Update(new Data.Entities.User
+            {
+                Id = request.Id.GetValueOrDefault(),
+                Email = request.Email,
+                HashedPassword = !string.IsNullOrWhiteSpace(request.Password)
+                    ? _encryptionUtilities.Hash(request.Password)
+                    : null
+            });
+            _unitOfWork.SaveChanges();
+
+            return new UserUpdateResult(true);
+        }
     }
 }

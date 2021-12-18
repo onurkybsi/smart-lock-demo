@@ -303,5 +303,180 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Assert
             Assert.False(actualResult.IsUserAuthorized);
         }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_Given_Request_Is_Null()
+        {
+            // Arrange
+            UserUpdateRequest request = null;
+            // Act
+            Exception exception = Record.Exception(() => userService.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
+        }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_Given_Id_Is_Null()
+        {
+            // Arrange
+            UserUpdateRequest request = new();
+            // Act
+            Exception exception = Record.Exception(() => userService.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Id"));
+        }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_Given_Id_Is_Less_Than_1()
+        {
+            // Arrange
+            UserUpdateRequest request = new() { Id = 0 };
+            // Act
+            Exception exception = Record.Exception(() => userService.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Id"));
+        }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_There_Is_No_Any_User_By_Given_Id()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(false);
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserUpdateRequest request = new() { Id = 1 };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("There is no such a user!"));
+        }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_Given_Email_Is_Not_In_Email_Format()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(true);
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserUpdateRequest request = new() { Id = 1, Email = "InvalidForm" };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Email"));
+        }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_Given_Email_Length_Is_More_Than_255()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(true);
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserUpdateRequest request = new() { Id = 1, Email = new String('E', 256) };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Email"));
+        }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_Given_Email_Is_Already_Exists()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(true);
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserUpdateRequest request = new() { Id = 1, Email = ValidEmail };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Email"));
+        }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_Given_Password_Is_Not_Strong()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(false);
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserUpdateRequest request = new() { Id = 1, Email = ValidEmail, Password = "invalidPassword" };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Password"));
+        }
+
+        [Fact]
+        public void UpdateUser_Throws_ValidationException_If_Given_Password_Length_Is_More_Than_255()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(false);
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserUpdateRequest request = new() { Id = 1, Email = ValidEmail, Password = new String('P', 256) };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.UpdateUser(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Password"));
+        }
+
+        [Fact]
+        public void UpdateUser_Does_Not_Throw_ValidationException_If_Given_Email_And_Password_Null_And_Password_Is_Valid()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.Update(It.Is<Data.Entities.User>(user =>
+                user.Id == 1))
+            );
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserUpdateRequest request = new() { Id = 1 };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.UpdateUser(request));
+            // Assert
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void UpdateUser_Updates_User_If_Request_Is_Valid()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfUserExistsOrNot(1))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.Update(It.Is<Data.Entities.User>(user =>
+                user.Id == 1))
+            );
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            UserUpdateRequest request = new() { Id = 1 };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.UpdateUser(request));
+            // Assert
+            mockUnitOfWork.Verify(muw => muw.UserRepository.Update(It.Is<Data.Entities.User>(user =>
+                user.Id == 1)), Times.Once()
+            );
+        }
     }
 }

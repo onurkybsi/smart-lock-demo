@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using SmartLockDemo.Infrastructure.Utilities;
+using System;
+using System.IO;
 
 namespace SmartLockDemo.WebAPI
 {
@@ -7,13 +11,17 @@ namespace SmartLockDemo.WebAPI
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            IConfiguration configuration = ConfigurationUtilities
+                .BuildConfiguration(Directory.GetCurrentDirectory(), Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            CreateHostBuilder(args, configuration).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseKestrel(options => options.AddServerHeader = false);
                     webBuilder.UseStartup<Startup>();
                 });
     }

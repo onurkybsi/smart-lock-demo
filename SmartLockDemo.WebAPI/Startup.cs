@@ -10,12 +10,10 @@ namespace SmartLockDemo.WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+            => Configuration = configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -27,13 +25,11 @@ namespace SmartLockDemo.WebAPI
             });
         }
 
-        private static void DescribeModules(IServiceCollection services)
+        private void DescribeModules(IServiceCollection services)
         {
-            byte[] salt = new byte[128 / 8];
-            using (RNGCryptoServiceProvider rngCsp = new()) rngCsp.GetBytes(salt);
-            (new Infrastructure.ModuleDescriptor(new Infrastructure.ModuleContext(salt))).Describe(services);
+            (new Infrastructure.ModuleDescriptor(new Infrastructure.ModuleContext(Configuration.GetSection("HASHING_SALT").Get<byte[]>()))).Describe(services);
 
-            (new Data.ModuleDescriptor(new Data.ModuleContext("Server=(localdb)\\MSSQLLocalDB;Database=SmartLockDemo;Trusted_Connection=True;")))
+            (new Data.ModuleDescriptor(new Data.ModuleContext(Configuration["MSSQL_CONNECTION_STRING"])))
                 .Describe(services);
             (new Business.ModuleDescriptor()).Describe(services);
         }

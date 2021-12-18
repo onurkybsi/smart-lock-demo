@@ -63,7 +63,12 @@ namespace SmartLockDemo.WebAPI.Controllers
             => Created(RestServiceUris.Administration.TagUser,
                 _smartLockAdministrationService.TagUser(request));
 
-        // RemoveDoorAccess
+        /// <summary>
+        /// Removes a door access from a tag
+        /// </summary>
+        /// <param name="tagId"></param>
+        /// <param name="doorId"></param>
+        /// <returns></returns>
         [HttpDelete(RestServiceUris.Administration.RemoveDoorAccess)]
         public IActionResult RemoveDoorAccess([FromQuery] int tagId, int doorId)
             => Ok(_smartLockAdministrationService.RemoveDoorAccess(new DoorAccessRemovalRequest
@@ -72,7 +77,10 @@ namespace SmartLockDemo.WebAPI.Controllers
                 DoorId = doorId
             }));
 
-        // RemoveTagFromUser
+        [HttpDelete(RestServiceUris.Administration.RemoveUserTag)]
+        public IActionResult RemoveUserTag([FromQuery] int userId, [FromQuery] int tagId)
+            => Ok(_smartLockAdministrationService.RemoveUserTag(new UserTagRemovalRequest { UserId = userId, TagId = tagId }));
+
         // DeleteUser
     }
 }

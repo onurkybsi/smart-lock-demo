@@ -90,5 +90,17 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
 
             return new DoorAccessRemovalResult(true);
         }
+
+        public UserTagRemovalResult RemoveUserTag(UserTagRemovalRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.UserTagRemovalRequest.ValidateWithExceptionOption(request);
+
+            _unitOfWork.UserTagRepository.Remove(request.UserId, request.TagId);
+            _unitOfWork.SaveChanges();
+
+            return new UserTagRemovalResult(true);
+        }
     }
 }

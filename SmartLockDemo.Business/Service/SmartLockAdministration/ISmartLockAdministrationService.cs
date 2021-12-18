@@ -48,5 +48,12 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
         /// <param name="request">Removal operation parameters</param>
         /// <returns></returns>
         DoorAccessRemovalResult RemoveDoorAccess(DoorAccessRemovalRequest request);
+
+        /// <summary>
+        /// Removes a tag from an user
+        /// </summary>
+        /// <param name="request">User tag removal parameters</param>
+        /// <returns></returns>
+        UserTagRemovalResult RemoveUserTag(UserTagRemovalRequest request);
     }
 }

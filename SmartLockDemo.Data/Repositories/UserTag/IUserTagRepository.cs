@@ -22,5 +22,12 @@ namespace SmartLockDemo.Data.Repositories
         /// <param name="tagId">Id of tag will be checked if it's already assigned to the user or not</param>
         /// <returns></returns>
         bool CheckIfUserAlreadyHasThisTag(int userId, int tagId);
+
+        /// <summary>
+        /// Removes UserTag entity by userId and doorId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="doorId"></param>
+        void Remove(int userId, int doorId);
     }
 }

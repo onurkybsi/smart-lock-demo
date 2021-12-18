@@ -34,6 +34,10 @@
             /// URI should be called to remove a door access from a tag
             /// </summary>
             public const string RemoveDoorAccess = "/administration/removedooraccess";
+            /// <summary>
+            /// URI should be called to remove a tag from a user
+            /// </summary>
+            public const string RemoveUserTag = "/administration/removeusertag";
         }
 
         /// <summary>

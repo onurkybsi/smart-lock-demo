@@ -11,9 +11,9 @@ namespace SmartLockDemo.WebAPI.Controllers
     [ApiController]
     public class AdministrationController : ControllerBase
     {
-        private readonly ISmartLockAdministrationService _smartLockAdministrationService;
+        private readonly IAdministrationService _smartLockAdministrationService;
 
-        public AdministrationController(ISmartLockAdministrationService smartLockAdministrationService)
+        public AdministrationController(IAdministrationService smartLockAdministrationService)
             => _smartLockAdministrationService = smartLockAdministrationService;
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace SmartLockDemo.Business
             ServiceDescriptor.Describe(typeof(IValidatorAccessor), typeof(ValidatorAccessor), ServiceLifetime.Scoped),
             ServiceDescriptor.Describe(typeof(IUserService), typeof(UserService), ServiceLifetime.Scoped 
                 /*TO-DO: ServiceAccessor should develop, and this lifetime should change to singleton*/),
-            ServiceDescriptor.Describe(typeof(ISmartLockAdministrationService), typeof(SmartLockAdministrationService),
+            ServiceDescriptor.Describe(typeof(IAdministrationService), typeof(AdministrationService),
                 ServiceLifetime.Scoped),
         }, new List<Type>
         {

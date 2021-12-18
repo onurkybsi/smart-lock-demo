@@ -8,12 +8,12 @@ using Xunit;
 
 namespace SmartLockDemo.Business.UnitTest.Service
 {
-    public class SmartLockAdministrationServiceTest
+    public class AdministrationServiceTest
     {
         private const string ValidName = "ValidName";
 
-        private ISmartLockAdministrationService smartLockAdministrationService = (new TestBusinessModuleInitializer())
-            .GetService<ISmartLockAdministrationService>();
+        private IAdministrationService administrationService = (new TestBusinessModuleInitializer())
+            .GetService<IAdministrationService>();
 
         [Fact]
         public void CreateDoor_Throws_ValidationException_If_Given_Request_Is_Null()
@@ -21,7 +21,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorCreationRequest request = null;
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoor(request));
+            Exception exception = Record.Exception(() => administrationService.CreateDoor(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
         }
@@ -32,7 +32,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorCreationRequest request = new();
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoor(request));
+            Exception exception = Record.Exception(() => administrationService.CreateDoor(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
         }
@@ -43,7 +43,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorCreationRequest request = new DoorCreationRequest { Name = "" };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoor(request));
+            Exception exception = Record.Exception(() => administrationService.CreateDoor(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
         }
@@ -54,7 +54,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorCreationRequest request = new DoorCreationRequest { Name = new String('D', 51) };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoor(request));
+            Exception exception = Record.Exception(() => administrationService.CreateDoor(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
         }
@@ -67,7 +67,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.DoorRepository.CheckIfDoorAlreadyExists(ValidName))
                 .Returns(true);
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
             DoorCreationRequest request = new()
             {
                 Name = ValidName
@@ -89,7 +89,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.SaveChanges());
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
             DoorCreationRequest validRequest = new()
             {
                 Name = ValidName
@@ -108,7 +108,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             TagCreationRequest request = null;
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateTag(request));
+            Exception exception = Record.Exception(() => administrationService.CreateTag(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
         }
@@ -119,7 +119,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             TagCreationRequest request = new();
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateTag(request));
+            Exception exception = Record.Exception(() => administrationService.CreateTag(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
         }
@@ -130,7 +130,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             TagCreationRequest request = new TagCreationRequest { Name = "" };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateTag(request));
+            Exception exception = Record.Exception(() => administrationService.CreateTag(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
         }
@@ -141,7 +141,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             TagCreationRequest request = new TagCreationRequest { Name = new String('T', 51) };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateTag(request));
+            Exception exception = Record.Exception(() => administrationService.CreateTag(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Name"));
         }
@@ -154,7 +154,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(ValidName))
                 .Returns(true);
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
             TagCreationRequest request = new()
             {
                 Name = ValidName
@@ -176,7 +176,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.SaveChanges());
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
             TagCreationRequest validRequest = new()
             {
                 Name = ValidName
@@ -195,7 +195,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorAccessCreationRequest request = null;
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoorAccess(request));
+            Exception exception = Record.Exception(() => administrationService.CreateDoorAccess(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
         }
@@ -206,7 +206,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 0, TagId = 2 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoorAccess(request));
+            Exception exception = Record.Exception(() => administrationService.CreateDoorAccess(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("DoorId"));
         }
@@ -217,7 +217,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 0 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.CreateDoorAccess(request));
+            Exception exception = Record.Exception(() => administrationService.CreateDoorAccess(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("TagId"));
         }
@@ -235,7 +235,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 2 };
             // Act
@@ -257,7 +257,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 2 };
             // Act
@@ -279,7 +279,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(true);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 2 };
             // Act
@@ -303,7 +303,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.SaveChanges());
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             DoorAccessCreationRequest request = new DoorAccessCreationRequest { DoorId = 2, TagId = 2 };
             // Act
@@ -320,7 +320,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             UserTaggingRequest request = null;
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.TagUser(request));
+            Exception exception = Record.Exception(() => administrationService.TagUser(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
         }
@@ -331,7 +331,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             UserTaggingRequest request = new UserTaggingRequest { UserId = 0, TagId = 2 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.TagUser(request));
+            Exception exception = Record.Exception(() => administrationService.TagUser(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("UserId"));
         }
@@ -342,7 +342,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 0 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.TagUser(request));
+            Exception exception = Record.Exception(() => administrationService.TagUser(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("TagId"));
         }
@@ -360,7 +360,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 2 };
             // Act
@@ -382,7 +382,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 2 };
             // Act
@@ -404,7 +404,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(true);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 2 };
             // Act
@@ -428,7 +428,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.SaveChanges());
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             UserTaggingRequest request = new UserTaggingRequest { UserId = 2, TagId = 2 };
             // Act
@@ -445,7 +445,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorAccessRemovalRequest request = null;
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.RemoveDoorAccess(request));
+            Exception exception = Record.Exception(() => administrationService.RemoveDoorAccess(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
         }
@@ -456,7 +456,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorAccessRemovalRequest request = new() { TagId = 0, DoorId = 2 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.RemoveDoorAccess(request));
+            Exception exception = Record.Exception(() => administrationService.RemoveDoorAccess(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("TagId"));
         }
@@ -467,7 +467,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             DoorAccessRemovalRequest request = new() { DoorId = 0, TagId = 2 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.RemoveDoorAccess(request));
+            Exception exception = Record.Exception(() => administrationService.RemoveDoorAccess(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("DoorId"));
         }
@@ -481,7 +481,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             DoorAccessRemovalRequest request = new() { DoorId = 2, TagId = 2 };
             // Act
@@ -501,7 +501,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.SaveChanges());
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             DoorAccessRemovalRequest request = new() { DoorId = 2, TagId = 2 };
             // Act
@@ -516,7 +516,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             UserTagRemovalRequest request = null;
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.RemoveUserTag(request));
+            Exception exception = Record.Exception(() => administrationService.RemoveUserTag(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
         }
@@ -527,7 +527,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             UserTagRemovalRequest request = new() { TagId = 0, UserId = 2 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.RemoveUserTag(request));
+            Exception exception = Record.Exception(() => administrationService.RemoveUserTag(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("TagId"));
         }
@@ -538,7 +538,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             UserTagRemovalRequest request = new() { TagId = 2, UserId = 0 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.RemoveUserTag(request));
+            Exception exception = Record.Exception(() => administrationService.RemoveUserTag(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("UserId"));
         }
@@ -552,7 +552,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             UserTagRemovalRequest request = new() { UserId = 2, TagId = 2 };
             // Act
@@ -572,7 +572,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.SaveChanges());
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             UserTagRemovalRequest request = new() { UserId = 2, TagId = 2 };
             // Act
@@ -587,7 +587,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             UserDeletionRequest request = null;
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.DeleteUser(request));
+            Exception exception = Record.Exception(() => administrationService.DeleteUser(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
         }
@@ -598,7 +598,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Arrange
             UserDeletionRequest request = new() { UserId = 0 };
             // Act
-            Exception exception = Record.Exception(() => smartLockAdministrationService.DeleteUser(request));
+            Exception exception = Record.Exception(() => administrationService.DeleteUser(request));
             // Assert
             Assert.True(exception is ValidationException && exception.Message.Contains("UserId"));
         }
@@ -612,7 +612,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
                 .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             UserDeletionRequest request = new() { UserId = 2 };
             // Act
@@ -632,7 +632,7 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Setup(muw => muw.SaveChanges());
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
-            ISmartLockAdministrationService administrationServiceToSetup = testModule.GetService<ISmartLockAdministrationService>();
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
 
             UserDeletionRequest request = new() { UserId = 2 };
             // Act

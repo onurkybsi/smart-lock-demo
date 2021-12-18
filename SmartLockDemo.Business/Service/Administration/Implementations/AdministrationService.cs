@@ -6,13 +6,13 @@ using SmartLockDemo.Infrastructure.Utilities;
 
 namespace SmartLockDemo.Business.Service.SmartLockAdministration
 {
-    internal class SmartLockAdministrationService : ISmartLockAdministrationService
+    internal class AdministrationService : IAdministrationService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
         private readonly IValidatorAccessor _validatorAccessor;
 
-        public SmartLockAdministrationService(IUnitOfWork unitOfWork, IValidatorAccessor validatorAccessor,
+        public AdministrationService(IUnitOfWork unitOfWork, IValidatorAccessor validatorAccessor,
             IUserService userService)
         {
             _unitOfWork = unitOfWork;

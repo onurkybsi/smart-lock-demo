@@ -5,7 +5,7 @@ namespace SmartLockDemo.Business.Service.SmartLockAdministration
     /// <summary>
     /// Provides system administration functionalities for admins
     /// </summary>
-    public interface ISmartLockAdministrationService
+    public interface IAdministrationService
     {
         /// <summary>
         /// Adds a new user to the system

@@ -1,6 +1,6 @@
 ﻿using SmartLockDemo.Infrastructure.Utilities;
 
-namespace SmartLockDemo.Business.Service.SmartLockAdministration
+namespace SmartLockDemo.Business.Service.Administration
 {
     /// <summary>
     /// Represents tag removal operation of user

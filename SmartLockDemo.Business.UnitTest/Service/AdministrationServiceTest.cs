@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Moq;
-using SmartLockDemo.Business.Service.SmartLockAdministration;
+using SmartLockDemo.Business.Service.Administration;
 using SmartLockDemo.Data;
 using SmartLockDemo.Infrastructure.Utilities;
 using System;

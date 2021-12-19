@@ -2,7 +2,7 @@
 using FluentValidation.Results;
 using SmartLockDemo.Data;
 
-namespace SmartLockDemo.Business.Service.SmartLockAdministration
+namespace SmartLockDemo.Business.Service.Administration
 {
     internal class UserTaggingRequestValidator : AbstractValidator<UserTaggingRequest>
     {

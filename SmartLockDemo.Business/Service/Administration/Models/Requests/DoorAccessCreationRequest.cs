@@ -1,4 +1,4 @@
-﻿namespace SmartLockDemo.Business.Service.SmartLockAdministration
+﻿namespace SmartLockDemo.Business.Service.Administration
 {
     /// <summary>
     /// Contains door access creation parameters

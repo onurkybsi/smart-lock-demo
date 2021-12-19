@@ -1,6 +1,6 @@
 ﻿using SmartLockDemo.Infrastructure.Utilities;
 
-namespace SmartLockDemo.Business.Service.SmartLockAdministration
+namespace SmartLockDemo.Business.Service.Administration
 {
     /// <summary>
     /// Represents user tagging operation result

@@ -1,6 +1,6 @@
 ﻿using KybInfrastructure.Core;
 using Microsoft.Extensions.DependencyInjection;
-using SmartLockDemo.Business.Service.SmartLockAdministration;
+using SmartLockDemo.Business.Service.Administration;
 using SmartLockDemo.Business.Service.User;
 using SmartLockDemo.Business.Utilities;
 using SmartLockDemo.Data;

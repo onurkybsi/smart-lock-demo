@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartLockDemo.Business.Service.SmartLockAdministration
+namespace SmartLockDemo.Business.Service.Administration
 {
     /// <summary>
     /// Represents result of tag creation operation

@@ -1,4 +1,4 @@
-﻿using SmartLockDemo.Business.Service.SmartLockAdministration;
+﻿using SmartLockDemo.Business.Service.Administration;
 using SmartLockDemo.Business.Service.User;
 
 namespace SmartLockDemo.Business.Utilities

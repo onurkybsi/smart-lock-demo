@@ -1,6 +1,6 @@
 ﻿using SmartLockDemo.Business.Service.User;
 
-namespace SmartLockDemo.Business.Service.SmartLockAdministration
+namespace SmartLockDemo.Business.Service.Administration
 {
     /// <summary>
     /// Provides system administration functionalities for admins

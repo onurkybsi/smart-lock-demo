@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SmartLockDemo.Business.Service.SmartLockAdministration;
+using SmartLockDemo.Business.Service.Administration;
 using SmartLockDemo.Business.Service.User;
 using SmartLockDemo.WebAPI.Utilities;
 
@@ -97,6 +97,5 @@ namespace SmartLockDemo.WebAPI.Controllers
         [HttpDelete(RestServiceUris.Administration.DeleteUser)]
         public IActionResult DeleteUser([FromQuery] int userId)
             => Ok(_smartLockAdministrationService.DeleteUser(new UserDeletionRequest { UserId = userId }));
-
     }
 }

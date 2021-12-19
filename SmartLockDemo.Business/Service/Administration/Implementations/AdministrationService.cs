@@ -4,7 +4,7 @@ using SmartLockDemo.Business.Utilities;
 using SmartLockDemo.Data;
 using SmartLockDemo.Infrastructure.Utilities;
 
-namespace SmartLockDemo.Business.Service.SmartLockAdministration
+namespace SmartLockDemo.Business.Service.Administration
 {
     internal class AdministrationService : IAdministrationService
     {

@@ -10,13 +10,24 @@ namespace SmartLockDemo.Data
     public class ModuleDescriptor : ModuleDescriptorBase<ModuleContext>
     {
         internal static ModuleContext moduleContext;
-        public ModuleDescriptor(ModuleContext context) : base(new List<ServiceDescriptor>
+        public ModuleDescriptor(ModuleContext context, string adminEmail, string adminHashedPassword) : base(new List<ServiceDescriptor>
         {
             new ServiceDescriptor(typeof(IUnitOfWork), (serviceProvider) => new UnitOfWork(new SmartLockDemoDbContext()),
                     ServiceLifetime.Scoped)
         }, context)
         {
             moduleContext = context;
+
+            using SmartLockDemoDbContext dbContext = new();
+            if (dbContext.Database.EnsureCreated())
+            {
+                dbContext.Users.Add(new Entities.User
+                {
+                    Email = adminEmail,
+                    HashedPassword = adminHashedPassword
+                });
+                dbContext.SaveChanges();
+            }
         }
     }
 }

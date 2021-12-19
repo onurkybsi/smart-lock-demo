@@ -11,7 +11,7 @@ namespace SmartLockDemo.WebAPI.Controllers
     /// Provides REST services to administrate the system
     /// </summary>
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class AdministrationController : ControllerBase
     {
         private readonly IAdministrationService _administrationService;

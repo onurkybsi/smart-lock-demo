@@ -35,8 +35,10 @@ namespace SmartLockDemo.WebAPI
                 Configuration["TOKEN_SECRET_KEY"], Configuration.GetSection("VALIDITY_PERIOD_OF_TOKENS_IN_MIN").Get<int>())))
                 .Describe(services);
 
-            (new Data.ModuleDescriptor(new Data.ModuleContext(Configuration["MSSQL_CONNECTION_STRING"])))
+            (new Data.ModuleDescriptor(new Data.ModuleContext(Configuration["MSSQL_CONNECTION_STRING"]), Configuration["ADMIN_EMAIL"],
+                Configuration["ADMIN_HASHED_PASSWORD"]))
                 .Describe(services);
+
             (new Business.ModuleDescriptor()).Describe(services);
         }
 

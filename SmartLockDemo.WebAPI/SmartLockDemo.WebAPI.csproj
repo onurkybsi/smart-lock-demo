@@ -2,10 +2,14 @@
 
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
+		<UserSecretsId>6b1f1826-75f6-44d1-a973-ee92a5629a80</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.4.1" />

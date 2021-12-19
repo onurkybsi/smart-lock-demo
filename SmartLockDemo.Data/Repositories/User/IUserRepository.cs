@@ -22,5 +22,12 @@ namespace SmartLockDemo.Data.Repositories
         /// </summary>
         /// <param name="userId"></param>
         void Delete(int userId);
+
+        /// <summary>
+        /// Receives hashed password of the user by given email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>Hashed password of user</returns>
+        string GetHashedPasswordByEmail(string email);
     }
 }

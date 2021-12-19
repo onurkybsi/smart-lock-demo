@@ -15,5 +15,6 @@ namespace SmartLockDemo.Business.Utilities
         UserTagRemovalRequestValidator UserTagRemovalRequest { get; }
         UserDeletionRequestValidator UserDeletionRequest { get; }
         UserUpdateRequestValidator UserUpdateRequest { get; }
+        LogInRequestValidator LogInRequest { get; }
     }
 }

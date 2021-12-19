@@ -32,10 +32,8 @@ namespace SmartLockDemo.Infrastructure.Utilities
             iterationCount: 100000,
             numBytesRequested: 256 / 8));
 
-        public bool ValidateHashedValue(string hashedValue)
-        {
-            throw new NotImplementedException();
-        }
+        public bool ValidateHashedValue(string originalValue, string hashedValue)
+            => Hash(originalValue) == hashedValue;
 
         public string CreateBearerToken()
             => CreateBearerToken(default);
@@ -47,7 +45,7 @@ namespace SmartLockDemo.Infrastructure.Utilities
             byte[] secretKey = Encoding.ASCII.GetBytes(_secretKeyWhichWillBeUsedInTokenCreation);
             var tokenDescriptor = SetTokenSubjectByRequest(new SecurityTokenDescriptor
             {
-                Expires = DateTime.UtcNow.AddMinutes(0.5),
+                Expires = DateTime.UtcNow.AddMinutes(_expireDateOfTokensWhichWillBeCreated),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature)
             }, request);
 

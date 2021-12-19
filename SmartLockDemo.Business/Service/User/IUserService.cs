@@ -25,5 +25,12 @@
         /// <param name="request"></param>
         /// <returns></returns>
         UserUpdateResult UpdateUser(UserUpdateRequest request);
+
+        /// <summary>
+        /// Logs the user into the system
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        LogInResult LogIn(LogInRequest request);
     }
 }

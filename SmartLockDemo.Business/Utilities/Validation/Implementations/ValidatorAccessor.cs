@@ -16,6 +16,7 @@ namespace SmartLockDemo.Business.Utilities
         private readonly UserTagRemovalRequestValidator _userTagRemovalRequestValidator;
         private readonly UserDeletionRequestValidator _userDeletionRequestValidator;
         private readonly UserUpdateRequestValidator _userUpdateRequest;
+        private readonly LogInRequestValidator _logInRequestValidator;
 
         public ValidatorAccessor(IUnitOfWork unitOfWork)
         {
@@ -29,6 +30,7 @@ namespace SmartLockDemo.Business.Utilities
             _userTagRemovalRequestValidator = new UserTagRemovalRequestValidator(unitOfWork);
             _userDeletionRequestValidator = new UserDeletionRequestValidator(unitOfWork);
             _userUpdateRequest = new UserUpdateRequestValidator(unitOfWork);
+            _logInRequestValidator = new LogInRequestValidator(unitOfWork);
         }
 
         public UserCreationRequestValidator UserCreationRequest { get => _userCreationRequestValidator; }
@@ -41,5 +43,6 @@ namespace SmartLockDemo.Business.Utilities
         public UserTagRemovalRequestValidator UserTagRemovalRequest { get => _userTagRemovalRequestValidator; }
         public UserDeletionRequestValidator UserDeletionRequest { get => _userDeletionRequestValidator; }
         public UserUpdateRequestValidator UserUpdateRequest { get => _userUpdateRequest; }
+        public LogInRequestValidator LogInRequest { get => _logInRequestValidator; }
     }
 }

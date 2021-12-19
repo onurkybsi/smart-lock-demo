@@ -70,5 +70,29 @@ namespace SmartLockDemo.Business.Service.User
 
             return new UserUpdateResult(true);
         }
+
+        public LogInResult LogIn(LogInRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.LogInRequest.ValidateWithExceptionOption(request);
+
+            Data.Entities.User userWhoTriesToLogin = _unitOfWork.UserRepository.Get(user => user.Email == request.Email);
+            if (!_encryptionUtilities.ValidateHashedValue(request.Password, userWhoTriesToLogin.HashedPassword))
+                return new LogInResult(false, null, "Wrong Password!");
+
+            string currentToken = _encryptionUtilities.CreateBearerToken(new BearerTokenCreationRequest
+            {
+                Id = userWhoTriesToLogin.Id,
+                Email = userWhoTriesToLogin.Email,
+                Role = ((Role)userWhoTriesToLogin.Role).ToString()
+            });
+
+            userWhoTriesToLogin.AuthorizationToken = currentToken;
+            _unitOfWork.UserRepository.Update(userWhoTriesToLogin);
+            _unitOfWork.SaveChanges();
+
+            return new LogInResult(true, currentToken);
+        }
     }
 }

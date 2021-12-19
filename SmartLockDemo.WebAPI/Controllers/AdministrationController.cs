@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartLockDemo.Business.Service.SmartLockAdministration;
 using SmartLockDemo.Business.Service.User;
 using SmartLockDemo.WebAPI.Utilities;
@@ -9,6 +10,7 @@ namespace SmartLockDemo.WebAPI.Controllers
     /// Provides REST services to administrate the system
     /// </summary>
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : ControllerBase
     {
         private readonly IAdministrationService _smartLockAdministrationService;

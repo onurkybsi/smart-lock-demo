@@ -15,7 +15,7 @@ namespace SmartLockDemo.Infrastructure
         {
             HashingSalt = hashingSalt;
             BearerTokenSecurityKey = bearerTokenSecurityKey;
-            ValiditiyPeriodOfBearerTokenInMs = validitiyPeriodOfBearerTokenInMs;
+            ValidityPeriodOfBearerTokenInMs = validityPeriodOfBearerTokenInMs;
         }
     }
 }

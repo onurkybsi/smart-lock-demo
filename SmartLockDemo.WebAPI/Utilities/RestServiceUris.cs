@@ -64,6 +64,10 @@
             /// URI should be called to update an user
             /// </summary>
             public const string UpdateUser = "/user/update";
+            /// <summary>
+            /// URI should be called to login to the system
+            /// </summary>
+            public const string Login = "/user/login";
         }
     }
 }

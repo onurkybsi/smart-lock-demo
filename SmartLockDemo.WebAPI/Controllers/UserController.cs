@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SmartLockDemo.Business.Service.User;
 using SmartLockDemo.WebAPI.Utilities;
 
 namespace SmartLockDemo.WebAPI.Controllers
 {
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -21,6 +24,19 @@ namespace SmartLockDemo.WebAPI.Controllers
         public IActionResult UpdateUser([FromBody] UserUpdateRequest request)
             => Ok(_userService.UpdateUser(request));
 
-        // TO-DO: SignIn
+        /// <summary>
+        /// Logs the user into the system
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost(RestServiceUris.User.Login)]
+        public IActionResult Login([FromBody] LogInRequest request)
+        {
+            LogInResult result = _userService.LogIn(request);
+            return result.IsSuccessful
+                ? Ok(result)
+                : StatusCode(StatusCodes.Status403Forbidden);
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SmartLockDemo.Business.Service.User;
 using SmartLockDemo.WebAPI.Utilities;
 
@@ -9,12 +11,17 @@ namespace SmartLockDemo.WebAPI.Controllers
     /// Provides REST services to administrate door access
     /// </summary>
     [ApiController]
+    [Authorize]
     public class DoorAccessController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ILogger<DoorAccessController> _logger;
 
-        public DoorAccessController(IUserService userService)
-            => _userService = userService;
+        public DoorAccessController(IUserService userService, ILogger<DoorAccessController> logger)
+        {
+            _userService = userService;
+            _logger = logger;
+        }
 
         /// <summary>
         /// Checks if the user whose ID is sent has access to the door whose ID is sent. 

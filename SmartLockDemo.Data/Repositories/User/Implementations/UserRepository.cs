@@ -43,5 +43,15 @@ namespace SmartLockDemo.Data.Repositories
 
             DbSet.Update(userWillBeUpdated);
         }
+
+        public string GetHashedPasswordByEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new InvalidOperationException("Email is not valid!");
+            return (from user in DbSet.AsQueryable()
+                    where user.Email == email
+                    select user.HashedPassword).FirstOrDefault()
+                        ?? throw new InvalidOperationException("Email couldn't received!");
+        }
     }
 }

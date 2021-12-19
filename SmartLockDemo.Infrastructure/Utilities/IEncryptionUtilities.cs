@@ -12,9 +12,10 @@
         /// <summary>
         /// Validates given value whether hashed by salt given in the module context
         /// </summary>
+        /// <param name="originalValue">Orginial value to validate</param>
         /// <param name="hashedValue">Hashed value to validate</param>
         /// <returns></returns>
-        bool ValidateHashedValue(string hashedValue);
+        bool ValidateHashedValue(string originalValue, string hashedValue);
 
         /// <summary>
         /// Creates bearer token for a user of a system using the secret key given in the module context

@@ -12,7 +12,8 @@ namespace SmartLockDemo.Infrastructure
     {
         public ModuleDescriptor(ModuleContext context) : base(new List<ServiceDescriptor>
         {
-            ServiceDescriptor.Describe(typeof(IEncryptionUtilities), (serviceProvider) => new EncryptionUtilities(context.HashingSalt),
+            ServiceDescriptor.Describe(typeof(IEncryptionUtilities), (serviceProvider) => new EncryptionUtilities(context.HashingSalt,
+                context.BearerTokenSecurityKey, context.ValidityPeriodOfBearerTokenInMs),
                 ServiceLifetime.Singleton)
         })
         { }

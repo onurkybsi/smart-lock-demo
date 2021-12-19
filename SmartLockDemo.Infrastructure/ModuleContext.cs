@@ -8,10 +8,14 @@ namespace SmartLockDemo.Infrastructure
     public class ModuleContext : IModuleContext
     {
         public byte[] HashingSalt { get; }
+        public string BearerTokenSecurityKey { get; }
+        public int ValidityPeriodOfBearerTokenInMs { get; }
 
-        public ModuleContext(byte[] hashingSalt)
+        public ModuleContext(byte[] hashingSalt, string bearerTokenSecurityKey, int validityPeriodOfBearerTokenInMs)
         {
-            this.HashingSalt = hashingSalt;
+            HashingSalt = hashingSalt;
+            BearerTokenSecurityKey = bearerTokenSecurityKey;
+            ValiditiyPeriodOfBearerTokenInMs = validitiyPeriodOfBearerTokenInMs;
         }
     }
 }

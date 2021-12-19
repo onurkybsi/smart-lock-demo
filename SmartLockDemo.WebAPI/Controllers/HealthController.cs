@@ -7,7 +7,7 @@ namespace SmartLockDemo.WebAPI.Controllers
     /// Provides a REST service which gives liveness information of the server
     /// </summary>
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("[controller]/[action]")]
     public class HealthController : ControllerBase
     {

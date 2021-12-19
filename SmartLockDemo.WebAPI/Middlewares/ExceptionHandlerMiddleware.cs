@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using SmartLockDemo.Infrastructure.Utilities;
 using System.Threading.Tasks;
 
@@ -11,9 +12,13 @@ namespace SmartLockDemo.WebAPI.Middlewares
     internal class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
-            => _next = next;
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
+        {
+            _next = next;
+            _logger = logger;
+        }
 
         public async Task InvokeAsync(HttpContext context)
         {
@@ -26,10 +31,11 @@ namespace SmartLockDemo.WebAPI.Middlewares
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await context.Response.WriteAsJsonAsync(ex.ExtractErrorMessagesFromValidationException());
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
+                _logger.LogError("Exception occurred when request proccessing: {0}", ex);
+
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                // TO-DO: Log it!
                 await context.Response.WriteAsync("An exception occurred!");
             }
         }

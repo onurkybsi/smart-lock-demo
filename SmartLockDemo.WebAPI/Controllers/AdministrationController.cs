@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartLockDemo.Business.Service.Administration;
 using SmartLockDemo.Business.Service.User;
@@ -10,13 +11,17 @@ namespace SmartLockDemo.WebAPI.Controllers
     /// Provides REST services to administrate the system
     /// </summary>
     [ApiController]
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : ControllerBase
     {
-        private readonly IAdministrationService _smartLockAdministrationService;
+        private readonly IAdministrationService _administrationService;
+        private readonly IUserService _userService;
 
-        public AdministrationController(IAdministrationService smartLockAdministrationService)
-            => _smartLockAdministrationService = smartLockAdministrationService;
+        public AdministrationController(IAdministrationService administrationService, IUserService userService)
+        {
+            _administrationService = administrationService;
+            _userService = userService;
+        }
 
         /// <summary>
         /// Creates a new user in the system
@@ -25,7 +30,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns>Result of creation operation</returns>
         [HttpPost(RestServiceUris.Administration.CreateUser)]
         public IActionResult CreateUser([FromBody] UserCreationRequest request)
-            => Created(RestServiceUris.Administration.CreateUser, _smartLockAdministrationService.CreateUser(request));
+            => Created(RestServiceUris.Administration.CreateUser, _administrationService.CreateUser(request));
 
         /// <summary>
         /// Creates a new door in the system
@@ -34,7 +39,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns>Result of creation operation</returns>
         [HttpPost(RestServiceUris.Administration.CreateDoor)]
         public IActionResult CreateDoor([FromBody] DoorCreationRequest request)
-            => Created(RestServiceUris.Administration.CreateDoor, _smartLockAdministrationService.CreateDoor(request));
+            => Created(RestServiceUris.Administration.CreateDoor, _administrationService.CreateDoor(request));
 
         /// <summary>
         /// Creates a new tag in the system
@@ -43,7 +48,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns>Result of creation operation</returns>
         [HttpPost(RestServiceUris.Administration.CreateTag)]
         public IActionResult CreateTag([FromBody] TagCreationRequest request)
-            => Created(RestServiceUris.Administration.CreateTag, _smartLockAdministrationService.CreateTag(request));
+            => Created(RestServiceUris.Administration.CreateTag, _administrationService.CreateTag(request));
 
         /// <summary>
         /// Creates a new access to a door
@@ -53,7 +58,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         [HttpPost(RestServiceUris.Administration.CreateDoorAccess)]
         public IActionResult CreateDoorAccess([FromBody] DoorAccessCreationRequest request)
             => Created(RestServiceUris.Administration.CreateDoorAccess,
-                _smartLockAdministrationService.CreateDoorAccess(request));
+                _administrationService.CreateDoorAccess(request));
 
         /// <summary>
         /// Tags an user to extend its door access as accessible doors under this tag
@@ -63,7 +68,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         [HttpPost(RestServiceUris.Administration.TagUser)]
         public IActionResult TagUser([FromBody] UserTaggingRequest request)
             => Created(RestServiceUris.Administration.TagUser,
-                _smartLockAdministrationService.TagUser(request));
+                _administrationService.TagUser(request));
 
         /// <summary>
         /// Removes a door access from a tag
@@ -73,7 +78,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns></returns>
         [HttpDelete(RestServiceUris.Administration.RemoveDoorAccess)]
         public IActionResult RemoveDoorAccess([FromQuery] int tagId, int doorId)
-            => Ok(_smartLockAdministrationService.RemoveDoorAccess(new DoorAccessRemovalRequest
+            => Ok(_administrationService.RemoveDoorAccess(new DoorAccessRemovalRequest
             {
                 TagId = tagId,
                 DoorId = doorId
@@ -87,7 +92,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns></returns>
         [HttpDelete(RestServiceUris.Administration.RemoveUserTag)]
         public IActionResult RemoveUserTag([FromQuery] int userId, [FromQuery] int tagId)
-            => Ok(_smartLockAdministrationService.RemoveUserTag(new UserTagRemovalRequest { UserId = userId, TagId = tagId }));
+            => Ok(_administrationService.RemoveUserTag(new UserTagRemovalRequest { UserId = userId, TagId = tagId }));
 
         /// <summary>
         /// Deletes an user from the system
@@ -96,7 +101,11 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns></returns>
         [HttpDelete(RestServiceUris.Administration.DeleteUser)]
         public IActionResult DeleteUser([FromQuery] int userId)
-            => Ok(_smartLockAdministrationService.DeleteUser(new UserDeletionRequest { UserId = userId }));
+        {
+            if (_userService.CheckIfUserIsAdmin(userId))
+                return StatusCode(StatusCodes.Status403Forbidden);
+            return Ok(_administrationService.DeleteUser(new UserDeletionRequest { UserId = userId }));
+        }
 
         /// <summary>
         /// Deletes a door from the system
@@ -105,7 +114,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns></returns>
         [HttpDelete(RestServiceUris.Administration.DeleteDoor)]
         public IActionResult DeleteDoor([FromQuery] int doorId)
-            => Ok(_smartLockAdministrationService.DeleteDoor(new DoorDeletionRequest { DoorId = doorId }));
+            => Ok(_administrationService.DeleteDoor(new DoorDeletionRequest { DoorId = doorId }));
 
         /// <summary>
         /// Deletes a tag from the system
@@ -114,6 +123,6 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <returns></returns>
         [HttpDelete(RestServiceUris.Administration.DeleteTag)]
         public IActionResult DeleteTag([FromQuery] int tagId)
-            => Ok(_smartLockAdministrationService.DeleteTag(new TagDeletionRequest { TagId = tagId }));
+            => Ok(_administrationService.DeleteTag(new TagDeletionRequest { TagId = tagId }));
     }
 }

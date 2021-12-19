@@ -19,13 +19,10 @@ namespace SmartLockDemo.Business.Service.User
         private void SetValidationRules()
         {
             RuleFor(request => request.Id)
-                .NotEmpty()
                 .GreaterThanOrEqualTo(1)
                 .Custom((id, validationContext) =>
                 {
-                    if (!id.HasValue)
-                        return;
-                    if (!_unitOfWork.UserRepository.CheckIfUserExistsOrNot(id.GetValueOrDefault()))
+                    if (!_unitOfWork.UserRepository.CheckIfUserExistsOrNot(id))
                         validationContext
                             .AddFailure(new ValidationFailure("Id", "There is no such a user!"));
                 });

@@ -711,5 +711,12 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Assert
             Assert.Equal("CreatedToken", actualResult.CreatedToken);
         }
+
+        [Fact]
+        public void CheckIfUserIsAdmin_Returns_False_If_Given_UserId_Less_Or_Equal_To_Zero()
+        {
+            // Act and Assert
+            Assert.False(userService.CheckIfUserIsAdmin(0));
+        }
     }
 }

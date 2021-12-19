@@ -21,8 +21,8 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut(RestServiceUris.User.UpdateUser)]
-        public IActionResult UpdateUser([FromBody] UserUpdateRequest request)
-            => Ok(_userService.UpdateUser(request));
+        public IActionResult UpdateUser([FromBody] UserUpdateBaseRequest request)
+            => Ok(_userService.UpdateUser(new UserUpdateRequest(request) { Id = HttpContext.GetUserId() }));
 
         /// <summary>
         /// Logs the user into the system

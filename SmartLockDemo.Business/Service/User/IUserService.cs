@@ -32,5 +32,12 @@
         /// <param name="request"></param>
         /// <returns></returns>
         LogInResult LogIn(LogInRequest request);
+
+        /// <summary>
+        /// Checks if user is admin or not
+        /// </summary>
+        /// <param name="userIdToCheck">Id of user to check</param>
+        /// <returns>True if user is admin</returns>
+        bool CheckIfUserIsAdmin(int userIdToCheck);
     }
 }

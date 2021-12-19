@@ -60,7 +60,7 @@ namespace SmartLockDemo.Business.Service.User
             // TO-DO: Change with a mapper!
             _unitOfWork.UserRepository.Update(new Data.Entities.User
             {
-                Id = request.Id.GetValueOrDefault(),
+                Id = request.Id,
                 Email = request.Email,
                 HashedPassword = !string.IsNullOrWhiteSpace(request.Password)
                     ? _encryptionUtilities.Hash(request.Password)
@@ -93,6 +93,15 @@ namespace SmartLockDemo.Business.Service.User
             _unitOfWork.SaveChanges();
 
             return new LogInResult(true, currentToken);
+        }
+
+        public bool CheckIfUserIsAdmin(int userIdToCheck)
+        {
+            if (userIdToCheck <= 0)
+                return false;
+            return _unitOfWork.UserRepository.Get(user =>
+                user.Id == userIdToCheck ||
+                user.Role == (byte)Role.Admin) != null;
         }
     }
 }

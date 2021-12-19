@@ -6,7 +6,6 @@
     public enum Role : byte
     {
         User = 1,
-        Admin = 2,
-        HeadAdmin = 3
+        Admin = 2
     }
 }

@@ -3,19 +3,19 @@
     /// <summary>
     /// Contains user update operation parameters
     /// </summary>
-    public class UserUpdateRequest
+    public class UserUpdateRequest : UserUpdateBaseRequest
     {
         /// <summary>
         /// User id to update
         /// </summary>
-        public int? Id { get; set; }
-        /// <summary>
-        /// New value of email
-        /// </summary>
-        public string Email { get; set; }
-        /// <summary>
-        /// New value of password
-        /// </summary>
-        public string Password { get; set; }
+        public int Id { get; set; }
+
+        public UserUpdateRequest() { }
+
+        public UserUpdateRequest(UserUpdateBaseRequest baseRequest)
+        {
+            Email = baseRequest.Email;
+            Password = baseRequest.Password;
+        }
     }
 }

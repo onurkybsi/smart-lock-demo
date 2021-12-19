@@ -112,7 +112,7 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// </summary>
         /// <param name="tagId">Tag id to delete</param>
         /// <returns></returns>
-        [HttpDelete(RestServiceUris.Administration.TagUser)]
+        [HttpDelete(RestServiceUris.Administration.DeleteTag)]
         public IActionResult DeleteTag([FromQuery] int tagId)
             => Ok(_smartLockAdministrationService.DeleteTag(new TagDeletionRequest { TagId = tagId }));
     }

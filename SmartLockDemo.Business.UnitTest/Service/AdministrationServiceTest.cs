@@ -640,5 +640,125 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Assert
             mockUnitOfWork.Verify(muw => muw.UserRepository.Delete(2), Times.Once);
         }
+
+        [Fact]
+        public void DeleteDoor_Throws_ValidationException_If_Given_Request_Is_Null()
+        {
+            // Arrange
+            DoorDeletionRequest request = null;
+            // Act
+            Exception exception = Record.Exception(() => administrationService.DeleteDoor(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
+        }
+
+        [Fact]
+        public void DeleteDoor_Throws_ValidationException_If_Given_DoorId_Is_Less_Than_1()
+        {
+            // Arrange
+            DoorDeletionRequest request = new() { DoorId = 0 };
+            // Act
+            Exception exception = Record.Exception(() => administrationService.DeleteDoor(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("DoorId"));
+        }
+
+        [Fact]
+        public void DeleteDoor_Throws_ValidationException_If_Door_Already_Has_Not_Tag_In_Given_Parameters()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.DoorRepository.CheckIfDoorAlreadyExists(2))
+                .Returns(false);
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
+
+            DoorDeletionRequest request = new() { DoorId = 2 };
+            // Act
+            Exception exception = Record.Exception(() => administrationServiceToSetup.DeleteDoor(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("There is no such a door already!"));
+        }
+
+        [Fact]
+        public void DeleteDoor_Deletes_User_Entity_From_DoorRepository_By_Given_Parameters_If_Request_Is_Valid()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.DoorRepository.CheckIfDoorAlreadyExists(2))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.DoorRepository.Delete(2));
+            mockUnitOfWork.Setup(muw => muw.SaveChanges());
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
+
+            DoorDeletionRequest request = new() { DoorId = 2 };
+            // Act
+            administrationServiceToSetup.DeleteDoor(request);
+            // Assert
+            mockUnitOfWork.Verify(muw => muw.DoorRepository.Delete(2), Times.Once);
+        }
+
+        [Fact]
+        public void DeleteTag_Throws_ValidationException_If_Given_Request_Is_Null()
+        {
+            // Arrange
+            TagDeletionRequest request = null;
+            // Act
+            Exception exception = Record.Exception(() => administrationService.DeleteTag(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
+        }
+
+        [Fact]
+        public void DeleteTag_Throws_ValidationException_If_Given_TagId_Is_Less_Than_1()
+        {
+            // Arrange
+            TagDeletionRequest request = new() { TagId = 0 };
+            // Act
+            Exception exception = Record.Exception(() => administrationService.DeleteTag(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("TagId"));
+        }
+
+        [Fact]
+        public void DeleteTag_Throws_ValidationException_If_Tag_Already_Has_Not_Tag_In_Given_Parameters()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(2))
+                .Returns(false);
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
+
+            TagDeletionRequest request = new() { TagId = 2 };
+            // Act
+            Exception exception = Record.Exception(() => administrationServiceToSetup.DeleteTag(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("There is no such a tag already!"));
+        }
+
+        [Fact]
+        public void DeleteTag_Deletes_User_Entity_From_TagRepository_By_Given_Parameters_If_Request_Is_Valid()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.TagRepository.CheckIfTagAlreadyExists(2))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.TagRepository.Delete(2));
+            mockUnitOfWork.Setup(muw => muw.SaveChanges());
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
+
+            TagDeletionRequest request = new() { TagId = 2 };
+            // Act
+            administrationServiceToSetup.DeleteTag(request);
+            // Assert
+            mockUnitOfWork.Verify(muw => muw.TagRepository.Delete(2), Times.Once);
+        }
     }
 }

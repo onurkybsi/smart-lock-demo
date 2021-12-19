@@ -6,6 +6,7 @@ using SmartLockDemo.Infrastructure.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace SmartLockDemo.Business.UnitTest.Service
@@ -477,6 +478,238 @@ namespace SmartLockDemo.Business.UnitTest.Service
             mockUnitOfWork.Verify(muw => muw.UserRepository.Update(It.Is<Data.Entities.User>(user =>
                 user.Id == 1)), Times.Once()
             );
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Request_Is_Null()
+        {
+            // Arrange
+            LogInRequest request = null;
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Request cannot be null!"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Email_Is_Null()
+        {
+            // Arrange
+            LogInRequest request = new() { Password = ValidPassword };
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Email"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Email_Is_Empty_String()
+        {
+            // Arrange
+            LogInRequest request = new() { Email = "", Password = ValidPassword };
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Email"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Email_Length_Is_Greater_Than_255()
+        {
+            // Arrange
+            LogInRequest request = new() { Email = new String('E', 256), Password = ValidPassword };
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Email"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Email_Is_Not_In_Correct_Format()
+        {
+            // Arrange
+            LogInRequest request = new() { Email = "incorrectformat@something", Password = ValidPassword };
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Email"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Email_Is_Not_Exist_In_UserRepository()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(false);
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+
+            LogInRequest request = new() { Email = ValidEmail, Password = ValidPassword };
+            // Act
+            Exception exception = Record.Exception(() => userServiceToSetup.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("There is no such an email!"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Password_Is_Null()
+        {
+            // Arrange
+            LogInRequest request = new() { Email = ValidEmail };
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Password"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Password_Is_Empty_String()
+        {
+            // Arrange
+            LogInRequest request = new() { Password = "", Email = ValidEmail };
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Password"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Password_Is_Not_Strong()
+        {
+            // Arrange
+            LogInRequest request = new() { Password = "nonstrongpass", Email = ValidEmail };
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Password"));
+        }
+
+        [Fact]
+        public void LogIn_Throws_ValidationException_If_Given_Password_Length_Is_Greater_Than_255()
+        {
+            // Arrange
+            LogInRequest request = new() { Email = ValidEmail, Password = new String('P', 256) };
+            // Act
+            Exception exception = Record.Exception(() => userService.LogIn(request));
+            // Assert
+            Assert.True(exception is ValidationException && exception.Message.Contains("Password"));
+        }
+
+        [Fact]
+        public void LogIn_Returns_IsSuccessful_False_If_Given_Password_Is_Wrong()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.Get(It.IsAny<Expression<Func<Data.Entities.User, bool>>>()))
+                .Returns(new Data.Entities.User { HashedPassword = "AnotherPassword123!" });
+
+            Mock<IEncryptionUtilities> mockEncryptionUtilities = new();
+            mockEncryptionUtilities.Setup(meu => meu.ValidateHashedValue(ValidEmail, "AnotherPassword123!"))
+                .Returns(false);
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, mockEncryptionUtilities.Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+
+            LogInRequest request = new() { Email = ValidEmail, Password = ValidPassword };
+            // Act
+            LogInResult actualResult = userServiceToSetup.LogIn(request);
+            // Assert
+            Assert.False(actualResult.IsSuccessful);
+        }
+
+        [Fact]
+        public void LogIn_Updates_UserRepository_By_CreatedToken()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.Get(It.IsAny<Expression<Func<Data.Entities.User, bool>>>()))
+                .Returns(new Data.Entities.User { Id = 1, Email = ValidEmail, Role = (byte)Role.User, HashedPassword = "HashedPassword" });
+            mockUnitOfWork.Setup(muw =>
+                muw.UserRepository.Update(It.Is<Data.Entities.User>(user => user.AuthorizationToken == "CreatedToken")));
+            mockUnitOfWork.Setup(muw => muw.SaveChanges());
+
+            Mock<IEncryptionUtilities> mockEncryptionUtilities = new();
+            mockEncryptionUtilities.Setup(meu => meu.ValidateHashedValue(ValidPassword, "HashedPassword"))
+                .Returns(true);
+            mockEncryptionUtilities.Setup(meu => meu.CreateBearerToken(It.Is<BearerTokenCreationRequest>(req =>
+                req.Id == 1 && req.Email == ValidEmail && req.Role == Role.User.ToString()))
+            ).Returns("CreatedToken");
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, mockEncryptionUtilities.Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+
+            LogInRequest request = new() { Email = ValidEmail, Password = ValidPassword };
+            // Act
+            LogInResult actualResult = userServiceToSetup.LogIn(request);
+            // Assert
+            mockUnitOfWork.Verify(muw =>
+                muw.UserRepository.Update(It.Is<Data.Entities.User>(user => user.AuthorizationToken == "CreatedToken")), Times.Once());
+        }
+
+        [Fact]
+        public void LogIn_Returns_True_If_User_Specified_In_Given_Request_Is_Authenticated()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.Get(It.IsAny<Expression<Func<Data.Entities.User, bool>>>()))
+                .Returns(new Data.Entities.User { Id = 1, Email = ValidEmail, Role = (byte)Role.User, HashedPassword = "HashedPassword" });
+            mockUnitOfWork.Setup(muw =>
+                muw.UserRepository.Update(It.Is<Data.Entities.User>(user => user.AuthorizationToken == "CreatedToken")));
+            mockUnitOfWork.Setup(muw => muw.SaveChanges());
+
+            Mock<IEncryptionUtilities> mockEncryptionUtilities = new();
+            mockEncryptionUtilities.Setup(meu => meu.ValidateHashedValue(ValidPassword, "HashedPassword"))
+                .Returns(true);
+            mockEncryptionUtilities.Setup(meu => meu.CreateBearerToken(It.Is<BearerTokenCreationRequest>(req =>
+                req.Id == 1 && req.Email == ValidEmail && req.Role == Role.User.ToString()))
+            ).Returns("CreatedToken");
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, mockEncryptionUtilities.Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+
+            LogInRequest request = new() { Email = ValidEmail, Password = ValidPassword };
+            // Act
+            LogInResult actualResult = userServiceToSetup.LogIn(request);
+            // Assert
+            Assert.True(actualResult.IsSuccessful);
+        }
+
+        [Fact]
+        public void LogIn_Returns_CreatedToken_If_User_Specified_In_Given_Request_Is_Authenticated()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.CheckIfEmailAlreadyExists(ValidEmail))
+                .Returns(true);
+            mockUnitOfWork.Setup(muw => muw.UserRepository.Get(It.IsAny<Expression<Func<Data.Entities.User, bool>>>()))
+                .Returns(new Data.Entities.User { Id = 1, Email = ValidEmail, Role = (byte)Role.User, HashedPassword = "HashedPassword" });
+            mockUnitOfWork.Setup(muw =>
+                muw.UserRepository.Update(It.Is<Data.Entities.User>(user => user.AuthorizationToken == "CreatedToken")));
+            mockUnitOfWork.Setup(muw => muw.SaveChanges());
+
+            Mock<IEncryptionUtilities> mockEncryptionUtilities = new();
+            mockEncryptionUtilities.Setup(meu => meu.ValidateHashedValue(ValidPassword, "HashedPassword"))
+                .Returns(true);
+            mockEncryptionUtilities.Setup(meu => meu.CreateBearerToken(It.Is<BearerTokenCreationRequest>(req =>
+                req.Id == 1 && req.Email == ValidEmail && req.Role == Role.User.ToString()))
+            ).Returns("CreatedToken");
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, mockEncryptionUtilities.Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+
+            LogInRequest request = new() { Email = ValidEmail, Password = ValidPassword };
+            // Act
+            LogInResult actualResult = userServiceToSetup.LogIn(request);
+            // Assert
+            Assert.Equal("CreatedToken", actualResult.CreatedToken);
         }
     }
 }

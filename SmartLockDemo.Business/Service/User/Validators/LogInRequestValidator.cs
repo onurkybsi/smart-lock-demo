@@ -26,13 +26,12 @@ namespace SmartLockDemo.Business.Service.User
                 {
                     if (!_unitOfWork.UserRepository.CheckIfEmailAlreadyExists(email))
                         validationContext
-                            .AddFailure(new ValidationFailure("Email", "This email already exists!"));
+                            .AddFailure(new ValidationFailure("Email", "There is no such an email!"));
                 });
             RuleFor(request => request.Password)
                 .NotEmpty()
                 .Matches(STRONG_PASSWORD_REGEX_EXPRESSION)
-                .MaximumLength(255)
-                .WithMessage("Wrong password!");
+                .MaximumLength(255);
         }
     }
 }

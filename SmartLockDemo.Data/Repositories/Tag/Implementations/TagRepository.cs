@@ -18,5 +18,13 @@ namespace SmartLockDemo.Data.Repositories
 
         public bool CheckIfTagAlreadyExists(int id)
             => DbSet.Any(tag => tag.Id == id);
+
+        public void Delete(int tagId)
+        {
+            Tag entityWillBeDeleted = DbSet.FirstOrDefault(tag => tag.Id == tagId);
+            if (entityWillBeDeleted is null)
+                throw new InvalidOperationException("There is no such an entity!");
+            DbSet.Remove(entityWillBeDeleted);
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace SmartLockDemo.WebAPI.Controllers
     /// Provides REST services to administrate the system
     /// </summary>
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class AdministrationController : ControllerBase
     {
         private readonly IAdministrationService _smartLockAdministrationService;
@@ -97,5 +97,23 @@ namespace SmartLockDemo.WebAPI.Controllers
         [HttpDelete(RestServiceUris.Administration.DeleteUser)]
         public IActionResult DeleteUser([FromQuery] int userId)
             => Ok(_smartLockAdministrationService.DeleteUser(new UserDeletionRequest { UserId = userId }));
+
+        /// <summary>
+        /// Deletes a door from the system
+        /// </summary>
+        /// <param name="doorId">Door id to delete</param>
+        /// <returns></returns>
+        [HttpDelete(RestServiceUris.Administration.DeleteDoor)]
+        public IActionResult DeleteDoor([FromQuery] int doorId)
+            => Ok(_smartLockAdministrationService.DeleteDoor(new DoorDeletionRequest { DoorId = doorId }));
+
+        /// <summary>
+        /// Deletes a tag from the system
+        /// </summary>
+        /// <param name="tagId">Tag id to delete</param>
+        /// <returns></returns>
+        [HttpDelete(RestServiceUris.Administration.TagUser)]
+        public IActionResult DeleteTag([FromQuery] int tagId)
+            => Ok(_smartLockAdministrationService.DeleteTag(new TagDeletionRequest { TagId = tagId }));
     }
 }

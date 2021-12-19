@@ -42,6 +42,14 @@
             /// URI should be called to delete an user
             /// </summary>
             public const string DeleteUser = "/administration/deleteuser";
+            /// <summary>
+            /// URI should be called to delete a door
+            /// </summary>
+            public const string DeleteDoor = "/administration/deletedoor";
+            /// <summary>
+            /// URI should be called to delete a tag
+            /// </summary>
+            public const string DeleteTag = "/administration/deletetag";
         }
 
         /// <summary>

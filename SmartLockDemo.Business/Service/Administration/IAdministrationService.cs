@@ -62,5 +62,19 @@ namespace SmartLockDemo.Business.Service.Administration
         /// <param name="request"></param>
         /// <returns></returns>
         UserDeletionResult DeleteUser(UserDeletionRequest request);
+
+        /// <summary>
+        /// Deletes a door from the system
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        DoorDeletionResult DeleteDoor(DoorDeletionRequest request);
+
+        /// <summary>
+        /// Deletes a tag from the system
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        TagDeletionResult DeleteTag(TagDeletionRequest request);
     }
 }

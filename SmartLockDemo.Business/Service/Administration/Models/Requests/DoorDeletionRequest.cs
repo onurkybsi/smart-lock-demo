@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmartLockDemo.Business.Administration
+﻿namespace SmartLockDemo.Business.Service.Administration
 {
+    /// <summary>
+    /// Contains door deletion operation parameters
+    /// </summary>
     public class DoorDeletionRequest
     {
+        public int DoorId { get; set; }
     }
 }

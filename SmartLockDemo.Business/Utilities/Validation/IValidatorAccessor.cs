@@ -14,6 +14,8 @@ namespace SmartLockDemo.Business.Utilities
         DoorAccessRemovalRequestValidator DoorAccessRemovalRequest { get; }
         UserTagRemovalRequestValidator UserTagRemovalRequest { get; }
         UserDeletionRequestValidator UserDeletionRequest { get; }
+        DoorDeletionRequestValidator DoorDeletionRequest { get; }
+        TagDeletionRequestValidator TagDeletionRequest { get; }
         UserUpdateRequestValidator UserUpdateRequest { get; }
         LogInRequestValidator LogInRequest { get; }
     }

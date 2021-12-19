@@ -21,5 +21,11 @@ namespace SmartLockDemo.Data.Repositories
         /// <param name="id">Tag ID to check</param>
         /// <returns></returns>
         bool CheckIfTagAlreadyExists(int id);
+
+        /// <summary>
+        /// Deletes a tag by given ID
+        /// </summary>
+        /// <param name="tagId"></param>
+        void Delete(int tagId);
     }
 }

@@ -18,5 +18,13 @@ namespace SmartLockDemo.Data.Repositories
 
         public bool CheckIfDoorAlreadyExists(int id)
             => DbSet.Any(door => door.Id == id);
+
+        public void Delete(int doorId)
+        {
+            Door entityWillBeDeleted = DbSet.FirstOrDefault(door => door.Id == doorId);
+            if (entityWillBeDeleted is null)
+                throw new InvalidOperationException("There is no such an entity!");
+            DbSet.Remove(entityWillBeDeleted);
+        }
     }
 }

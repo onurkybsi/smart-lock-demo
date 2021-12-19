@@ -114,5 +114,29 @@ namespace SmartLockDemo.Business.Service.Administration
 
             return new UserDeletionResult(true);
         }
+
+        public DoorDeletionResult DeleteDoor(DoorDeletionRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.DoorDeletionRequest.ValidateWithExceptionOption(request);
+
+            _unitOfWork.DoorRepository.Delete(request.DoorId);
+            _unitOfWork.SaveChanges();
+
+            return new DoorDeletionResult(true);
+        }
+
+        public TagDeletionResult DeleteTag(TagDeletionRequest request)
+        {
+            if (request is null)
+                throw new ValidationException("Request cannot be null!");
+            _validatorAccessor.TagDeletionRequest.ValidateWithExceptionOption(request);
+
+            _unitOfWork.TagRepository.Delete(request.TagId);
+            _unitOfWork.SaveChanges();
+
+            return new TagDeletionResult(true);
+        }
     }
 }

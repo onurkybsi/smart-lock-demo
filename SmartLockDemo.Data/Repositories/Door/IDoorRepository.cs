@@ -21,5 +21,11 @@ namespace SmartLockDemo.Data.Repositories
         /// <param name="id">Door ID to check</param>
         /// <returns></returns>
         bool CheckIfDoorAlreadyExists(int id);
+
+        /// <summary>
+        /// Deletes a door by given ID
+        /// </summary>
+        /// <param name="doorId"></param>
+        void Delete(int doorId);
     }
 }

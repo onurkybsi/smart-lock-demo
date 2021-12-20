@@ -30,6 +30,11 @@ services:
     environment:
         - SA_PASSWORD=My_password123
         - ACCEPT_EULA=Y
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+        - "6379:6379" 
   smartlockdemo.webapi:
     image: ${DOCKER_REGISTRY-}smartlockdemowebapi
     container_name: smartlockdemo.webapi
@@ -40,6 +45,9 @@ services:
         - ASPNETCORE_ENVIRONMENT=Development
         - MSSQL_CONNECTION_STRING=Server=sqlserver;Database=SmartLockDemo;User=sa;Password=My_password123;
         - ELASTICSEARCH_URI=http://elasticsearch:9200/
+        - REDIS_URI=redis
+        - REDIS_PORT=6379
+        - IS_CACHING_ACTIVE=True
     depends_on:
       - sqlserver
     ports:

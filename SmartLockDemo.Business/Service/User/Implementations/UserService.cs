@@ -104,6 +104,9 @@ namespace SmartLockDemo.Business.Service.User
         }
 
         public List<User> GetAllUsers()
-            => _unitOfWork.UserRepository.GetList(user => true).MapTo<List<User>>();
+        {
+            var users = _unitOfWork.UserRepository.GetAllUsers();
+            return users.MapTo<List<User>>();
+        }
     }
 }

@@ -36,7 +36,7 @@ namespace SmartLockDemo.WebAPI.Controllers
             LogInResult result = _userService.LogIn(request);
             return result.IsSuccessful
                 ? Ok(result)
-                : StatusCode(StatusCodes.Status403Forbidden);
+                : BadRequest(result);
         }
     }
 }

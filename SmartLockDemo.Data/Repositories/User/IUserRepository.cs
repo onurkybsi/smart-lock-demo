@@ -1,5 +1,6 @@
 ﻿using KybInfrastructure.Data;
 using SmartLockDemo.Data.Entities;
+using System.Collections.Generic;
 
 namespace SmartLockDemo.Data.Repositories
 {
@@ -29,5 +30,11 @@ namespace SmartLockDemo.Data.Repositories
         /// <param name="email"></param>
         /// <returns>Hashed password of user</returns>
         string GetHashedPasswordByEmail(string email);
+
+        /// <summary>
+        /// Receives all users from the repository
+        /// </summary>
+        /// <returns></returns>
+        List<User> GetAllUsers();
     }
 }

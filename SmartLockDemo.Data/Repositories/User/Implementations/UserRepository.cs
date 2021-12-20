@@ -1,13 +1,20 @@
 ﻿using KybInfrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using SmartLockDemo.Data.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SmartLockDemo.Data.Repositories
 {
     internal class UserRepository : EFRepository<User>, IUserRepository
     {
-        public UserRepository(SmartLockDemoDbContext context) : base(context) { }
+        private readonly SmartLockDemoDbContext _context;
+
+        public UserRepository(SmartLockDemoDbContext context) : base(context)
+        {
+            _context = context;
+        }
 
         public bool CheckIfEmailAlreadyExists(string emailToCheck)
         {
@@ -53,5 +60,11 @@ namespace SmartLockDemo.Data.Repositories
                     select user.HashedPassword).FirstOrDefault()
                         ?? throw new InvalidOperationException("Email couldn't received!");
         }
+
+        public List<User> GetAllUsers()
+            => (from user in _context.Users
+                select user).Include(user => user.UserTags)
+                            .ThenInclude(userTag => userTag.Tag)
+                            .ToList();
     }
 }

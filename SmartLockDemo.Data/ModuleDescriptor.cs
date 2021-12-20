@@ -41,7 +41,8 @@ namespace SmartLockDemo.Data
                 dbContext.Users.Add(new Entities.User
                 {
                     Email = adminEmail,
-                    HashedPassword = adminHashedPassword
+                    HashedPassword = adminHashedPassword,
+                    Role = 2 /*Admin Role*/
                 });
                 dbContext.SaveChanges();
             }

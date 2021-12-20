@@ -1,6 +1,7 @@
 ﻿using KybInfrastructure.Data;
 using SmartLockDemo.Data.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SmartLockDemo.Data.Repositories

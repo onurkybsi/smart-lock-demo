@@ -27,7 +27,7 @@
         "ELASTICSEARCH_URI": "http://localhost:9200/",
         "REDIS_URI": "localhost",
         "REDIS_PORT": "6379",
-        "IS_REDIS_ACTIVE": "True"
+        "IS_CACHING_ACTIVE": "True"
       },
       "applicationUrl": "http://localhost:5000",
       "dotnetRunMessages": "true"

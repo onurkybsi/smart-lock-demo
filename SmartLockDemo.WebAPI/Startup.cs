@@ -33,7 +33,7 @@ namespace SmartLockDemo.WebAPI
                 .Describe(services);
 
             (new Data.ModuleDescriptor(new Data.ModuleContext(Configuration["MSSQL_CONNECTION_STRING"],
-                    Configuration["REDIS_URI"], Configuration["REDIS_PORT"], bool.Parse(Configuration["IS_REDIS_ACTIVE"])),
+                    Configuration["REDIS_URI"], Configuration["REDIS_PORT"], bool.Parse(Configuration["IS_CACHING_ACTIVE"])),
                     Configuration["ADMIN_EMAIL"], Configuration["ADMIN_HASHED_PASSWORD"]))
                 .Describe(services);
 

@@ -7,7 +7,12 @@ namespace SmartLockDemo.Data.Repositories
 {
     internal class UserTagRepository : EFRepository<UserTag>, IUserTagRepository
     {
-        public UserTagRepository(SmartLockDemoDbContext context) : base(context) { }
+        private readonly IUserDoorAccessRepository _userDoorAccessRepository;
+
+        public UserTagRepository(SmartLockDemoDbContext context, IUserDoorAccessRepository userDoorAccessRepository) : base(context)
+        {
+            _userDoorAccessRepository = userDoorAccessRepository;
+        }
 
         public IQueryable<UserTag> GetTable()
             => DbSet.AsQueryable();
@@ -16,15 +21,26 @@ namespace SmartLockDemo.Data.Repositories
             => DbSet.Any(userTag => userTag.UserId == userId &&
                                     userTag.TagId == tagId);
 
+        public new void Add(UserTag userTag)
+        {
+            if (userTag is null)
+                throw new ArgumentNullException(nameof(userTag));
+            DbSet.Add(userTag);
+            _userDoorAccessRepository.TryToSetAccessibilityOfUserInCache(userTag.UserId, userTag.TagId, true);
+        }
+
         // TO-DO: This approach is not optimal, entity shouldn't be loaded to memory!
-        public void Remove(int userId, int doorId)
+        public void Remove(int userId, int tagId)
         {
             UserTag entityWillBeDeleted = DbSet.FirstOrDefault(userTag =>
                 userTag.UserId == userId &&
-                userTag.TagId == doorId);
+                userTag.TagId == tagId);
             if (entityWillBeDeleted is null)
                 throw new InvalidOperationException("There is no such an entity!");
+
             DbSet.Remove(entityWillBeDeleted);
+
+            _userDoorAccessRepository.TryToSetAccessibilityOfUserInCache(userId, tagId, false);
         }
     }
 }

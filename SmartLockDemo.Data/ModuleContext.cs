@@ -10,15 +10,15 @@ namespace SmartLockDemo.Data
         public string SQLServerConnectionString { get; }
         public string RedisUri { get; }
         public string RedisPort { get; }
-        public bool IsRedisActive { get; set; }
+        public bool IsCachingActive { get; set; }
 
         public ModuleContext(string sqlServerConnectionString, string redisUri,
-            string redisPort, bool isRedisActive)
+            string redisPort, bool isCachingActive)
         {
             SQLServerConnectionString = sqlServerConnectionString;
             RedisUri = redisUri;
             RedisPort = redisPort;
-            IsRedisActive = isRedisActive;
+            IsCachingActive = isCachingActive;
         }
     }
 }

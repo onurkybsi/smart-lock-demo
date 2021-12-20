@@ -18,28 +18,18 @@ namespace SmartLockDemo.Data
         public ModuleDescriptor(ModuleContext context, string adminEmail, string adminHashedPassword) : base(new List<ServiceDescriptor>
         {
             new ServiceDescriptor(typeof(IUnitOfWork), (serviceProvider) => new UnitOfWork(new SmartLockDemoDbContext(),
-                serviceProvider.GetRequiredService<IRedisClient>()),
+                serviceProvider.GetRequiredService<IRedisClient>(), serviceProvider.GetRequiredService<ILogger<UnitOfWork>>()),
                     ServiceLifetime.Scoped)
-        }.AddIfConditionSatisfied(() => context.IsRedisActive, new ServiceDescriptor(typeof(IRedisClient), (serviceProvider) =>
+        }.AddIfConditionSatisfied(() => context.IsCachingActive, new ServiceDescriptor(typeof(IRedisClient), (serviceProvider) =>
         {
-            try
-            {
-                ConfigurationOptions options = new();
-                options.EndPoints.Add($"{context.RedisUri}:{context.RedisPort}");
-                options.AbortOnConnectFail = false;
-                options.ConnectTimeout = 10;
+            ConfigurationOptions options = new();
+            options.EndPoints.Add($"{context.RedisUri}:{context.RedisPort}");
+            options.AbortOnConnectFail = false;
+            options.ConnectTimeout = 10;
 
-                ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(options);
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(options);
 
-                return new RedisClient(redis.GetDatabase());
-            }
-            catch (System.Exception ex)
-            {
-                serviceProvider.GetRequiredService<ILogger>()?.LogError("RedisClient couldn't be constructed: ", ex);
-                moduleContext.IsRedisActive = false;
-
-                return default;
-            }
+            return new RedisClient(redis.GetDatabase());
         }, ServiceLifetime.Singleton)),
             context)
         {

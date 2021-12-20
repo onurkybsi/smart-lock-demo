@@ -99,7 +99,7 @@ namespace SmartLockDemo.Business.Service.User
             if (userIdToCheck <= 0)
                 return false;
             return _unitOfWork.UserRepository.Get(user =>
-                user.Id == userIdToCheck ||
+                user.Id == userIdToCheck &&
                 user.Role == (byte)Role.Admin) != null;
         }
 

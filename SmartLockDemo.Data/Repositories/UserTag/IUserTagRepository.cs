@@ -24,10 +24,10 @@ namespace SmartLockDemo.Data.Repositories
         bool CheckIfUserAlreadyHasThisTag(int userId, int tagId);
 
         /// <summary>
-        /// Removes UserTag entity by userId and doorId
+        /// Removes UserTag entity by userId and tagId
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="doorId"></param>
-        void Remove(int userId, int doorId);
+        /// <param name="tagId"></param>
+        void Remove(int userId, int tagId);
     }
 }

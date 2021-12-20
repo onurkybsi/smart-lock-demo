@@ -1,16 +1,19 @@
-﻿using SmartLockDemo.Data.Repositories;
+﻿using Microsoft.Extensions.Logging;
+using SmartLockDemo.Data.Repositories;
 using SmartLockDemo.Data.Utilities;
-using StackExchange.Redis;
 
 namespace SmartLockDemo.Data
 {
     internal class UnitOfWork : KybInfrastructure.Data.UnitOfWorkBase<SmartLockDemoDbContext>, IUnitOfWork
     {
         private readonly IRedisClient _redisClient;
+        private readonly ILogger<UnitOfWork> _logger;
 
-        public UnitOfWork(SmartLockDemoDbContext context, IRedisClient redisClient) : base(context)
+        public UnitOfWork(SmartLockDemoDbContext context,
+            IRedisClient redisClient, ILogger<UnitOfWork> logger) : base(context)
         {
             _redisClient = redisClient;
+            _logger = logger;
         }
 
         private IUserRepository userRepository;
@@ -35,7 +38,7 @@ namespace SmartLockDemo.Data
         public IUserTagRepository UserTagRepository {
             get {
                 if (userTagRepository is null)
-                    userTagRepository = new UserTagRepository(DatabaseContext);
+                    userTagRepository = new UserTagRepository(DatabaseContext, UserDoorAccessRepository);
                 return userTagRepository;
             }
         }
@@ -62,7 +65,7 @@ namespace SmartLockDemo.Data
         public IUserDoorAccessRepository UserDoorAccessRepository {
             get {
                 if (userDoorAccessRepository is null)
-                    userDoorAccessRepository = new UserDoorAccessRepository(_redisClient, DatabaseContext);
+                    userDoorAccessRepository = new UserDoorAccessRepository(_redisClient, DatabaseContext, _logger);
                 return userDoorAccessRepository;
             }
         }

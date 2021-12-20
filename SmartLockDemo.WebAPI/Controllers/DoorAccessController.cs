@@ -30,22 +30,22 @@ namespace SmartLockDemo.WebAPI.Controllers
         /// <param name="doorId">Id of the door that is wanted to access</param>
         /// <returns>Access control result</returns>
         [HttpGet(RestServiceUris.DoorAccess.CheckDoorAccess)]
-        public IActionResult CheckDoorAccess([FromQuery] int doorId)
+        public IActionResult CheckDoorAccess([FromRoute] int id)
         {
             DoorAccessControlResult result = _userService.CheckDoorAccess(new DoorAccessControlRequest
             {
                 UserId = HttpContext.GetUserId(),
-                DoorId = doorId
+                DoorId = id
             });
 
             if (result.IsUserAuthorized)
             {
-                _logger.LogInformation($"User: {HttpContext.GetUserId()} accessed to Door: {doorId}");
+                _logger.LogInformation($"User: {HttpContext.GetUserId()} accessed to Door: {id}");
                 return Ok();
             }
             else
             {
-                _logger.LogInformation($"User: {HttpContext.GetUserId()} failed to access Door: {doorId}");
+                _logger.LogInformation($"User: {HttpContext.GetUserId()} failed to access Door: {id}");
                 return StatusCode(StatusCodes.Status403Forbidden);
             }
         }

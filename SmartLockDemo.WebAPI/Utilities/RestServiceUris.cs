@@ -72,7 +72,7 @@
             /// <summary>
             /// URI checks whether user has door access or not
             /// </summary>
-            public const string CheckDoorAccess = "/dooraccess";
+            public const string CheckDoorAccess = "/dooraccess/{id}";
         }
 
         /// <summary>

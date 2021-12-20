@@ -16,7 +16,8 @@ namespace SmartLockDemo.Business.Utilities
                     .ForMember(dest => dest.Doors, opt => opt.MapFrom(source => source.TagDoors));
                 cfg.CreateMap<Data.Entities.UserTag, Tag>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.TagId))
-                    .ForMember(dest => dest.Name, opt => opt.MapFrom(source => source.Tag.Name));
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(source => source.Tag.Name))
+                    .ForMember(dest => dest.Doors, opt => opt.MapFrom(source => source.Tag.TagDoors));
                 cfg.CreateMap<Data.Entities.TagDoor, Door>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.DoorId))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(source => source.Door.Name));

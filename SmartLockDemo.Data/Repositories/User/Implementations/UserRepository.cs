@@ -61,6 +61,8 @@ namespace SmartLockDemo.Data.Repositories
             => (from user in DbSet
                 select user).Include(user => user.UserTags)
                             .ThenInclude(userTag => userTag.Tag)
+                            .ThenInclude(tag => tag.TagDoors)
+                            .ThenInclude(tagDoor => tagDoor.Door)
                             .ToList();
     }
 }

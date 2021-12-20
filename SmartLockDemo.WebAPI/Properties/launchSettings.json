@@ -22,7 +22,9 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MSSQL_CONNECTION_STRING": "Server=(localdb)\\MSSQLLocalDB;Database=SmartLockDemo;Trusted_Connection=True;",
+        "ELASTICSEARCH_URI": "http://localhost:9200/"
       },
       "applicationUrl": "http://localhost:5000",
       "dotnetRunMessages": "true"

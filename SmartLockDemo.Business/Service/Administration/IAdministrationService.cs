@@ -1,4 +1,5 @@
 ﻿using SmartLockDemo.Business.Service.User;
+using System.Collections.Generic;
 
 namespace SmartLockDemo.Business.Service.Administration
 {
@@ -76,5 +77,23 @@ namespace SmartLockDemo.Business.Service.Administration
         /// <param name="request"></param>
         /// <returns></returns>
         TagDeletionResult DeleteTag(TagDeletionRequest request);
+
+        /// <summary>
+        /// Receives all users from the UserRepository
+        /// </summary>
+        /// <returns></returns>
+        List<User.User> GetAllUsers();
+
+        /// <summary>
+        /// Receives all doors from the DoorRepository
+        /// </summary>
+        /// <returns></returns>
+        List<Door> GetAllDoors();
+
+        /// <summary>
+        /// Receives all tags from the TagRepository
+        /// </summary>
+        /// <returns></returns>
+        List<Tag> GetAllTags();
     }
 }

@@ -50,6 +50,18 @@
             /// URI should be called to delete a tag
             /// </summary>
             public const string DeleteTag = "/administration/deletetag";
+            /// <summary>
+            /// URI should be called to get all users in the system
+            /// </summary>
+            public const string GetAllUsers = "/administration/getallusers";
+            /// <summary>
+            /// URI should be called to get all door in the system
+            /// </summary>
+            public const string GetAllDoors = "/administration/getalldoors";
+            /// <summary>
+            /// URI should be called to get all tags in the system
+            /// </summary>
+            public const string GetAllTags = "/administration/getalltags";
         }
 
         /// <summary>

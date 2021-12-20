@@ -718,5 +718,21 @@ namespace SmartLockDemo.Business.UnitTest.Service
             // Act and Assert
             Assert.False(userService.CheckIfUserIsAdmin(0));
         }
+
+        [Fact]
+        public void GetAllUsers_Receives_All_Tags_Entities_From_UserRepository()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.UserRepository.GetList(It.IsAny<Expression<Func<Data.Entities.User, bool>>>()))
+                .Returns(new List<Data.Entities.User> { new Data.Entities.User { Id = 1234 } });
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IUserService userServiceToSetup = testModule.GetService<IUserService>();
+            // Act
+            var actualResult = userServiceToSetup.GetAllUsers();
+            // Assert
+            Assert.Contains(actualResult, user => user.Id == 1234);
+        }
     }
 }

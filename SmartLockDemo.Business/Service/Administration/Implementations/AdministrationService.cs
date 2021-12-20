@@ -3,6 +3,7 @@ using SmartLockDemo.Business.Service.User;
 using SmartLockDemo.Business.Utilities;
 using SmartLockDemo.Data;
 using SmartLockDemo.Infrastructure.Utilities;
+using System.Collections.Generic;
 
 namespace SmartLockDemo.Business.Service.Administration
 {
@@ -138,5 +139,14 @@ namespace SmartLockDemo.Business.Service.Administration
 
             return new TagDeletionResult(true);
         }
+
+        public List<User.User> GetAllUsers()
+            => _userService.GetAllUsers();
+
+        public List<Door> GetAllDoors()
+            => _unitOfWork.DoorRepository.GetList(door => true).MapTo<List<Door>>();
+
+        public List<Tag> GetAllTags()
+            => _unitOfWork.TagRepository.GetList(tag => true).MapTo<List<Tag>>();
     }
 }

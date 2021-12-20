@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using SmartLockDemo.Business.Utilities;
 using SmartLockDemo.Infrastructure.Utilities;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SmartLockDemo.Business.Service.User
@@ -103,5 +104,8 @@ namespace SmartLockDemo.Business.Service.User
                 user.Id == userIdToCheck ||
                 user.Role == (byte)Role.Admin) != null;
         }
+
+        public List<User> GetAllUsers()
+            => _unitOfWork.UserRepository.GetList(user => true).MapTo<List<User>>();
     }
 }

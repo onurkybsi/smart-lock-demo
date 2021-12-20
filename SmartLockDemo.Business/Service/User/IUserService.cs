@@ -1,4 +1,6 @@
-﻿namespace SmartLockDemo.Business.Service.User
+﻿using System.Collections.Generic;
+
+namespace SmartLockDemo.Business.Service.User
 {
     /// <summary>
     /// Implement business rules of User domain
@@ -39,5 +41,11 @@
         /// <param name="userIdToCheck">Id of user to check</param>
         /// <returns>True if user is admin</returns>
         bool CheckIfUserIsAdmin(int userIdToCheck);
+
+        /// <summary>
+        /// Receives all users from the UserRepository
+        /// </summary>
+        /// <returns></returns>
+        List<User> GetAllUsers();
     }
 }

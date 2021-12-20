@@ -4,6 +4,9 @@ using SmartLockDemo.Business.Service.Administration;
 using SmartLockDemo.Data;
 using SmartLockDemo.Infrastructure.Utilities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace SmartLockDemo.Business.UnitTest.Service
@@ -759,6 +762,38 @@ namespace SmartLockDemo.Business.UnitTest.Service
             administrationServiceToSetup.DeleteTag(request);
             // Assert
             mockUnitOfWork.Verify(muw => muw.TagRepository.Delete(2), Times.Once);
+        }
+
+        [Fact]
+        public void GetAllDoors_Receives_All_Doors_Entities_From_DoorRepository()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.DoorRepository.GetList(It.IsAny<Expression<Func<Data.Entities.Door, bool>>>()))
+                .Returns(new List<Data.Entities.Door> { new Data.Entities.Door { Id = 1234 } });
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
+            // Act
+            var actualResult = administrationServiceToSetup.GetAllDoors();
+            // Assert
+            Assert.Contains(actualResult, door => door.Id == 1234);
+        }
+
+        [Fact]
+        public void GetAllTags_Receives_All_Tags_Entities_From_TagRepository()
+        {
+            // Arrange
+            Mock<IUnitOfWork> mockUnitOfWork = new();
+            mockUnitOfWork.Setup(muw => muw.TagRepository.GetList(It.IsAny<Expression<Func<Data.Entities.Tag, bool>>>()))
+                .Returns(new List<Data.Entities.Tag> { new Data.Entities.Tag { Id = 1234 } });
+
+            TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
+            IAdministrationService administrationServiceToSetup = testModule.GetService<IAdministrationService>();
+            // Act
+            var actualResult = administrationServiceToSetup.GetAllTags();
+            // Assert
+            Assert.Contains(actualResult, tag => tag.Id == 1234);
         }
     }
 }

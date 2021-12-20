@@ -6,6 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="KybInfrastructure.Data" Version="1.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.2.88" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartLockDemo.Infrastructure\SmartLockDemo.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

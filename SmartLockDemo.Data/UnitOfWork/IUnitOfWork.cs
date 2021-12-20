@@ -12,5 +12,6 @@ namespace SmartLockDemo.Data
         public IUserTagRepository UserTagRepository { get; }
         public IDoorRepository DoorRepository { get; }
         public ITagDoorRepository TagDoorRepository { get; }
+        public IUserDoorAccessRepository UserDoorAccessRepository { get; }
     }
 }

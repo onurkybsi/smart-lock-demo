@@ -2,7 +2,6 @@
 using SmartLockDemo.Business.Utilities;
 using SmartLockDemo.Infrastructure.Utilities;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SmartLockDemo.Business.Service.User
 {
@@ -45,11 +44,10 @@ namespace SmartLockDemo.Business.Service.User
                 throw new ValidationException("Request cannot be null!");
             _validatorAccessor.DoorAccessControlRequest.ValidateWithExceptionOption(request);
 
-            bool userHasTheTag = (from td in _unitOfWork.TagDoorRepository.GetTable()
-                                  join ut in _unitOfWork.UserTagRepository.GetTable() on td.TagId equals ut.TagId
-                                  where td.DoorId == request.DoorId && ut.UserId == request.UserId
-                                  select new { }).Any();
-            return new DoorAccessControlResult { IsUserAuthorized = userHasTheTag };
+            return new DoorAccessControlResult
+            {
+                IsUserAuthorized = _unitOfWork.UserDoorAccessRepository.CheckThatUserHasAccessTheDoor(request.UserId, request.DoorId)
+            };
         }
 
         public UserUpdateResult UpdateUser(UserUpdateRequest request)

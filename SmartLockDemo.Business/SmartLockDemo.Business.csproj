@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartLockDemo.Data\SmartLockDemo.Data.csproj" />
-    <ProjectReference Include="..\SmartLockDemo.Infrastructure\SmartLockDemo.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

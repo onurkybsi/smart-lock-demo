@@ -23,10 +23,7 @@ namespace SmartLockDemo.WebAPI
             DescribeModules(services);
             ConfigureAuthorization(services);
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SmartLockDemo.WebAPI", Version = "v1" });
-            });
+            ConfigureSwagger(services);
         }
 
         private void DescribeModules(IServiceCollection services)
@@ -35,8 +32,9 @@ namespace SmartLockDemo.WebAPI
                 Configuration["TOKEN_SECRET_KEY"], Configuration.GetSection("VALIDITY_PERIOD_OF_TOKENS_IN_MIN").Get<int>())))
                 .Describe(services);
 
-            (new Data.ModuleDescriptor(new Data.ModuleContext(Configuration["MSSQL_CONNECTION_STRING"]), Configuration["ADMIN_EMAIL"],
-                Configuration["ADMIN_HASHED_PASSWORD"]))
+            (new Data.ModuleDescriptor(new Data.ModuleContext(Configuration["MSSQL_CONNECTION_STRING"],
+                    Configuration["REDIS_URI"], Configuration["REDIS_PORT"], bool.Parse(Configuration["IS_REDIS_ACTIVE"])),
+                    Configuration["ADMIN_EMAIL"], Configuration["ADMIN_HASHED_PASSWORD"]))
                 .Describe(services);
 
             (new Business.ModuleDescriptor()).Describe(services);
@@ -62,6 +60,46 @@ namespace SmartLockDemo.WebAPI
                         ValidateAudience = false
                     };
                 });
+            return services;
+        }
+
+        private static IServiceCollection ConfigureSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(swagger =>
+            {
+                swagger.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "SmartLockDemo.API",
+                    Description = "smart-lock-demo represents a demo system for a cloud-based smart lock system"
+                });
+
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer token123\"",
+                });
+
+                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                          {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                          },
+                          System.Array.Empty<string>()
+                    }
+                });
+            });
+
             return services;
         }
 

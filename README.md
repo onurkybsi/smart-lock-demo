@@ -4,13 +4,14 @@ _smart-lock-demo_ represents a demo system for a cloud-based smart lock system.
 
 ## Installation
 
-Use the [docker-compose](https://docs.docker.com/compose/) to install _smart-lock-demo_.
-
-The services provided by _SmartLockDemo.WebAPI_ can be used with the Swagger interface at http://localhost:8000/swagger/index.html
+Use the [docker-compose](https://docs.docker.com/compose/) to install _smart-lock-demo_
 
 ```bash
 docker-compose up
 ```
+
+The services provided by _SmartLockDemo.WebAPI_ can be used with the Swagger interface at http://localhost:8000/swagger/index.html
+
 ## Architecture
 
 ![Architecture](https://user-images.githubusercontent.com/54269270/146815651-b3dc86e6-fc90-4f12-ad62-aeb4032be4a7.png)

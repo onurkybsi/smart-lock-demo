@@ -1,5 +1,6 @@
 ﻿using KybInfrastructure.Data;
 using SmartLockDemo.Data.Entities;
+using System.Collections.Generic;
 
 namespace SmartLockDemo.Data.Repositories
 {
@@ -27,5 +28,11 @@ namespace SmartLockDemo.Data.Repositories
         /// </summary>
         /// <param name="tagId"></param>
         void Delete(int tagId);
+
+        /// <summary>
+        /// Receives all tags from the repository
+        /// </summary>
+        /// <returns></returns>
+        List<Tag> GetAllTags();
     }
 }

@@ -1,6 +1,8 @@
 ﻿using KybInfrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using SmartLockDemo.Data.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SmartLockDemo.Data.Repositories
@@ -26,5 +28,11 @@ namespace SmartLockDemo.Data.Repositories
                 throw new InvalidOperationException("There is no such an entity!");
             DbSet.Remove(entityWillBeDeleted);
         }
+
+        public List<Tag> GetAllTags()
+            => (from tag in DbSet
+                select tag).Include(tag => tag.TagDoors)
+                           .ThenInclude(tagDoor => tagDoor.Door)
+                           .ToList();
     }
 }

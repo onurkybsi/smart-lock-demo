@@ -9,12 +9,8 @@ namespace SmartLockDemo.Data.Repositories
 {
     internal class UserRepository : EFRepository<User>, IUserRepository
     {
-        private readonly SmartLockDemoDbContext _context;
 
-        public UserRepository(SmartLockDemoDbContext context) : base(context)
-        {
-            _context = context;
-        }
+        public UserRepository(SmartLockDemoDbContext context) : base(context) { }
 
         public bool CheckIfEmailAlreadyExists(string emailToCheck)
         {
@@ -62,7 +58,7 @@ namespace SmartLockDemo.Data.Repositories
         }
 
         public List<User> GetAllUsers()
-            => (from user in _context.Users
+            => (from user in DbSet
                 select user).Include(user => user.UserTags)
                             .ThenInclude(userTag => userTag.Tag)
                             .ToList();

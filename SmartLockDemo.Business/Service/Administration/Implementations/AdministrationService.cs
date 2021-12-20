@@ -147,6 +147,8 @@ namespace SmartLockDemo.Business.Service.Administration
             => _unitOfWork.DoorRepository.GetList(door => true).MapTo<List<Door>>();
 
         public List<Tag> GetAllTags()
-            => _unitOfWork.TagRepository.GetList(tag => true).MapTo<List<Tag>>();
+            => _unitOfWork.TagRepository
+                    .GetAllTags()
+                    .MapTo<List<Tag>>();
     }
 }

@@ -52,3 +52,4 @@ services:
       - sqlserver
     ports:
         - "8000:80"
+    restart: always

@@ -229,21 +229,12 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void CheckDoorAccess_Returns_IsUserAuthorized_True_If_There_Are_Valid_Entities_In_TagDoor_And_UserTag_Repositories_By_Given_Request()
+        public void CheckDoorAccess_Returns_IsUserAuthorized_True_If_There_The_User_Has_The_Access()
         {
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
-
-            SetupTagDoorRepository(mockUnitOfWork, new List<Data.Entities.TagDoor> {
-                new Data.Entities.TagDoor {
-                    DoorId = 1, TagId = 2
-                }
-            });
-            SetupUserTagRepository(mockUnitOfWork, new List<Data.Entities.UserTag> {
-                new Data.Entities.UserTag {
-                    UserId = 1, TagId = 2
-                }
-            });
+            mockUnitOfWork.Setup(muw => muw.UserDoorAccessRepository.CheckThatUserHasAccessTheDoor(1, 1))
+                .Returns(true);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
             IUserService userServiceToSetup = testModule.GetService<IUserService>();
@@ -261,33 +252,13 @@ namespace SmartLockDemo.Business.UnitTest.Service
             Assert.True(actualResult.IsUserAuthorized);
         }
 
-        private static void SetupTagDoorRepository(Mock<IUnitOfWork> mockUnitOfWorkWillSetup, List<Data.Entities.TagDoor> mockRepository)
-         => mockUnitOfWorkWillSetup.Setup(muw => muw.TagDoorRepository.GetTable())
-                .Returns(mockRepository.AsQueryable());
-
-        private static void SetupUserTagRepository(Mock<IUnitOfWork> mockUnitOfWorkWillSetup, List<Data.Entities.UserTag> mockRepository)
-            => mockUnitOfWorkWillSetup.Setup(muw => muw.UserTagRepository.GetTable())
-                .Returns(mockRepository.AsQueryable());
-
         [Fact]
-        public void CheckDoorAccess_Returns_IsUserAuthorized_False_If_There_Are_No_Valid_Entitie_In_TagDoor_And_UserTag_Repositories_By_Given_Request()
+        public void CheckDoorAccess_Returns_IsUserAuthorized_False_If_There_The_User_Does_Not_Have_The_Access()
         {
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
-
-            SetupTagDoorRepository(mockUnitOfWork, new List<Data.Entities.TagDoor> {
-                new Data.Entities.TagDoor {
-                    DoorId = 1, TagId = 2
-                }
-            });
-            SetupUserTagRepository(mockUnitOfWork, new List<Data.Entities.UserTag> {
-                new Data.Entities.UserTag {
-                     UserId = 1, TagId = 1
-                },
-                new Data.Entities.UserTag {
-                     UserId = 1, TagId = 3
-                }
-            });
+            mockUnitOfWork.Setup(muw => muw.UserDoorAccessRepository.CheckThatUserHasAccessTheDoor(3, 1))
+                .Returns(false);
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);
             IUserService userServiceToSetup = testModule.GetService<IUserService>();
@@ -720,11 +691,11 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void GetAllUsers_Receives_All_Tags_Entities_From_UserRepository()
+        public void GetAllUsers_Calls_GetAllUser_From_UserRepository_To_Get_All_Users()
         {
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
-            mockUnitOfWork.Setup(muw => muw.UserRepository.GetList(It.IsAny<Expression<Func<Data.Entities.User, bool>>>()))
+            mockUnitOfWork.Setup(muw => muw.UserRepository.GetAllUsers())
                 .Returns(new List<Data.Entities.User> { new Data.Entities.User { Id = 1234 } });
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);

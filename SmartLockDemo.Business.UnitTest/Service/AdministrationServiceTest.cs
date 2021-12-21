@@ -781,11 +781,11 @@ namespace SmartLockDemo.Business.UnitTest.Service
         }
 
         [Fact]
-        public void GetAllTags_Receives_All_Tags_Entities_From_TagRepository()
+        public void GetAllTags_Calls_GetAllTags_From_TagRepository_To_Get_All_Tags()
         {
             // Arrange
             Mock<IUnitOfWork> mockUnitOfWork = new();
-            mockUnitOfWork.Setup(muw => muw.TagRepository.GetList(It.IsAny<Expression<Func<Data.Entities.Tag, bool>>>()))
+            mockUnitOfWork.Setup(muw => muw.TagRepository.GetAllTags())
                 .Returns(new List<Data.Entities.Tag> { new Data.Entities.Tag { Id = 1234 } });
 
             TestBusinessModuleInitializer testModule = new(mockUnitOfWork.Object, (new Mock<IEncryptionUtilities>()).Object);

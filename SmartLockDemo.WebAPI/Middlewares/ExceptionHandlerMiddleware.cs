@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SmartLockDemo.Infrastructure.Utilities;
+using System;
 using System.Threading.Tasks;
 
 namespace SmartLockDemo.WebAPI.Middlewares
@@ -30,6 +31,11 @@ namespace SmartLockDemo.WebAPI.Middlewares
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await context.Response.WriteAsJsonAsync(ex.ExtractErrorMessagesFromValidationException());
+            }
+            catch (ArgumentNullException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(ex.Message);
             }
             catch (System.Exception ex)
             {

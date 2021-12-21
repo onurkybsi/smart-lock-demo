@@ -12,7 +12,7 @@ docker-compose up
 
 The services provided by _SmartLockDemo.WebAPI_ can be used with the Swagger interface at http://localhost:8000/swagger/index.html
 
-2. System admin email address as initial values;  _onurbpm@outlook.com_, password: _Strongpassword123!_ has been assigned. After the application starts, you can change these values with the _/user/update_ endpoint, or you can change them from appsettings.json before the application ever starts.
+2. System admin email address as initial values;  _onurbpm@outlook.com_, password: _Strongpassword123!_ has been assigned. After the application starts, you can update these values with the _/user/update_ endpoint, or you can change them from appsettings.json before the application ever starts.
 
 ## Architecture
 

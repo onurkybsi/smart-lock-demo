@@ -10,6 +10,8 @@ namespace SmartLockDemo.Data
         public string SQLServerConnectionString { get; }
         public string RedisUri { get; }
         public string RedisPort { get; }
+        
+        // TO-DO: This can be written by concurrent executions, handle this issue by locking or smth else
         public bool IsCachingActive { get; set; }
 
         public ModuleContext(string sqlServerConnectionString, string redisUri,

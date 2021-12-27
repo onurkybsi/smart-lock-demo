@@ -18,7 +18,7 @@ The services provided by _SmartLockDemo.WebAPI_ can be used with the Swagger int
 
 ![Architecture](https://user-images.githubusercontent.com/54269270/146815651-b3dc86e6-fc90-4f12-ad62-aeb4032be4a7.png)
 
-_smart-lock-demo_ is designed according to [n-tier architecture](https://en.wikipedia.org/wiki/Multitier_architecture). As can be seen from the drawing above, the system is built on 4 layers: `WebAPI`, `Business`, `Data` and `Infrastructure`. All layers specify all their dependencies using _KybInfrastructure's_ [ModuleDescriptor](https://github.com/onurkybsi/KybInfrastructure/tree/master/KybInfrastructure.Core/ModuleDescriptor). The _WebAPI_ layer provides **_absolute independence_** between all layers in the system by resolving the ModuleDescriptor's of all layers.
+_smart-lock-demo_ is designed according to [n-layer architecture](https://www.ibm.com/cloud/learn/three-tier-architecture). As can be seen from the drawing above, the system is built on 4 layers: `WebAPI`, `Business`, `Data` and `Infrastructure`. All layers specify all their dependencies using _KybInfrastructure's_ [ModuleDescriptor](https://github.com/onurkybsi/KybInfrastructure/tree/master/KybInfrastructure.Core/ModuleDescriptor). The _WebAPI_ layer provides **_absolute independence_** between all layers in the system by resolving the ModuleDescriptor's of all layers.
 
 # WebAPI Layer
 
